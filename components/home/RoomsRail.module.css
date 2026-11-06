@@ -1,0 +1,112 @@
+.section {
+  position: relative;
+  background: var(--color-hague);
+  color: var(--color-aulait);
+}
+
+.stage {
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
+  padding-block: clamp(5rem, 12vh, 7rem) clamp(3.5rem, 8vh, 5rem);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.stage::-webkit-scrollbar {
+  display: none;
+}
+
+.section[data-pinned] .stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.rail {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 2.6vw, 2.75rem);
+  width: max-content;
+  padding-inline: clamp(1rem, 3.2vw, 3.5rem);
+  will-change: transform;
+}
+
+.intro {
+  flex: none;
+  width: min(84vw, 36rem);
+  scroll-snap-align: start;
+}
+
+.intro h2 {
+  color: var(--color-shallot);
+}
+
+.intro p {
+  margin-top: 1.25rem;
+  max-width: 21em;
+}
+
+.card {
+  flex: none;
+  width: min(84vw, 100svh);
+  scroll-snap-align: center;
+}
+
+.cardLink {
+  display: block;
+}
+
+.art {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 900ms var(--ease-settle);
+}
+
+.cardLink:hover .svg,
+.cardLink:focus-visible .svg {
+  transform: scale(1.045);
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.9rem;
+}
+
+.cardTitle {
+  font-size: clamp(1.375rem, 2.3vw, 2.25rem);
+}
+
+.dots {
+  display: flex;
+  flex: none;
+}
+
+.dots i {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-left: -0.3rem;
+  border: 2px solid var(--color-hague);
+  border-radius: 50%;
+}
+
+.end {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+  width: min(80vw, 24rem);
+  scroll-snap-align: end;
+}

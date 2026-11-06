@@ -1,0 +1,190 @@
+@import "tailwindcss";
+
+/* The palette. Farrow & Ball names, close on-screen values.
+   Angelina's branding replaces these nine tokens and everything follows. */
+@theme static {
+  --color-romesco: #ba4845;
+  --color-lulworth: #a1b8ca;
+  --color-india: #cb9e59;
+  --color-oldwhite: #c7bfab;
+  --color-aulait: #ebe7dc;
+  --color-shallot: #d5a3bb;
+  --color-calamine: #e6d1cb;
+  --color-bancha: #686a47;
+  --color-hague: #3d4e57;
+
+  --font-sans: var(--font-mori), Arial, sans-serif;
+
+  --ease-roll: cubic-bezier(0.65, 0, 0.2, 1);
+  --ease-settle: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-aulait);
+    color: var(--color-hague);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-synthesis: none;
+    /* The two-storey g from the logo, everywhere. */
+    font-feature-settings: "ss03";
+    scroll-padding-top: 6rem;
+  }
+
+  /* Body copy is always PP Mori Semibold. */
+  body {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: clamp(1.1875rem, 1.04rem + 0.55vw, 1.625rem);
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    overflow-x: clip;
+  }
+
+  /* Titles are always PP Mori Black. -2% is the tightest lowercase takes before letters fuse. */
+  h1,
+  h2,
+  h3,
+  .title {
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 0.92;
+    text-wrap: balance;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--color-india);
+    color: var(--color-hague);
+  }
+
+  :focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+}
+
+@utility display-xl {
+  font-size: clamp(3.75rem, 14.5vw, 15rem);
+}
+@utility display-lg {
+  font-size: clamp(3.25rem, 10vw, 10.5rem);
+}
+@utility display-md {
+  font-size: clamp(2.5rem, 6.4vw, 6.75rem);
+}
+@utility display-sm {
+  font-size: clamp(1.875rem, 3.4vw, 3.5rem);
+}
+@utility gutter {
+  padding-inline: clamp(1rem, 3.2vw, 3.5rem);
+}
+@utility measure {
+  max-width: 34em;
+}
+
+/* Reveal on scroll. Content stays visible without JavaScript. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(1.6rem);
+  transition:
+    opacity 700ms var(--ease-settle),
+    transform 900ms var(--ease-settle);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js [data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Chunky button: on hover a new coat rolls across. */
+.paint-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3.25rem;
+  padding: 0.7rem 1.6rem 0.8rem;
+  border-radius: 999px;
+  background-color: var(--link);
+  background-image: linear-gradient(var(--link-over), var(--link-over));
+  background-repeat: no-repeat;
+  background-size: 0% 100%;
+  color: var(--link-ink);
+  line-height: 1;
+  transition:
+    background-size 460ms var(--ease-roll),
+    color 200ms ease 120ms;
+}
+.paint-link:hover,
+.paint-link:focus-visible {
+  background-size: 100% 100%;
+  color: var(--link-over-ink);
+}
+
+/* Page changes roll a fresh coat across the old room. The awning stays put. */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-old(root) {
+  animation: none;
+  opacity: 0;
+}
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-group(site-awning) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-awning) {
+  display: none;
+}
+::view-transition-new(site-awning) {
+  animation: none;
+}
+::view-transition-group(.coat-under) {
+  z-index: 1;
+}
+::view-transition-old(.coat-under) {
+  animation: none;
+}
+::view-transition-group(.coat) {
+  z-index: 2;
+}
+::view-transition-new(.coat) {
+  animation: roll-in 640ms var(--ease-roll) both;
+}
+@keyframes roll-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

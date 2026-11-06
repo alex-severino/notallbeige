@@ -1,0 +1,293 @@
+.intro {
+  position: relative;
+  padding-block: clamp(3rem, 8vh, 6rem) clamp(5rem, 13vh, 9rem);
+  background: var(--color-calamine);
+  color: var(--color-hague);
+}
+
+.introTitle {
+  max-width: 7.2em;
+  color: var(--color-romesco);
+}
+
+.introCopy {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  max-width: 44rem;
+  margin-top: clamp(2.5rem, 7vh, 5rem);
+  margin-left: auto;
+}
+
+.lead {
+  font-size: 1.32em;
+  line-height: 1.16;
+}
+
+.rosette {
+  position: absolute;
+  top: clamp(1rem, 6vh, 4rem);
+  right: clamp(1rem, 6vw, 7rem);
+  width: clamp(8rem, 19vw, 18rem);
+  aspect-ratio: 1;
+}
+
+.rosetteSpin,
+.rosetteCore {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.rosetteSpin {
+  animation: spin 26s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.doorsSection {
+  position: relative;
+  padding-block: clamp(6rem, 15vh, 10rem) clamp(5rem, 12vh, 8rem);
+  background: var(--color-india);
+  color: var(--color-hague);
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 3rem;
+  margin-bottom: clamp(2.5rem, 7vh, 4.5rem);
+}
+
+.headLead {
+  max-width: 21em;
+  margin: 0 0 0.35em;
+}
+
+.doors {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 3.4vw, 4rem);
+}
+
+.doorLink {
+  display: block;
+  height: 100%;
+}
+
+.frame {
+  padding: clamp(8px, 1vw, 15px) clamp(8px, 1vw, 15px) 0;
+  aspect-ratio: 5 / 8;
+  border-radius: 999px 999px 0 0;
+  background: var(--color-aulait);
+}
+
+.opening {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 999px 999px 0 0;
+  perspective: 1500px;
+}
+
+.beyond {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.leaf {
+  position: absolute;
+  inset: 0;
+  background: var(--leaf);
+  color: var(--leaf-ink);
+  transform-origin: left center;
+  transform: rotateY(0deg);
+  transition: transform 1100ms var(--ease-settle);
+}
+
+.door[data-reveal="in"] .leaf {
+  transform: rotateY(26deg);
+  transition-delay: calc(var(--reveal-delay, 0ms) + 260ms);
+}
+
+.doorLink:hover .leaf,
+.doorLink:focus-visible .leaf {
+  transform: rotateY(76deg);
+  transition-delay: 0ms;
+}
+
+@media (hover: none) {
+  .door[data-reveal="in"] .leaf {
+    transform: rotateY(68deg);
+  }
+}
+
+.leafPanelTop,
+.leafPanelBottom {
+  position: absolute;
+  inset-inline: 15%;
+  border: clamp(3px, 0.32vw, 5px) solid currentColor;
+  opacity: 0.55;
+}
+
+.leafPanelTop {
+  top: 8%;
+  bottom: 42%;
+  border-radius: 999px 999px 0 0;
+}
+
+.leafPanelBottom {
+  top: 62%;
+  bottom: 6%;
+}
+
+.leafNumber {
+  position: absolute;
+  inset-inline: 0;
+  top: 22%;
+  text-align: center;
+  font-size: clamp(3.5rem, 9vw, 9rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.knob {
+  position: absolute;
+  top: 56%;
+  right: 6%;
+  width: clamp(12px, 1.4vw, 22px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-india);
+}
+
+.doorTitle {
+  margin-top: 1.1rem;
+}
+
+.doorText {
+  margin-top: 0.6rem;
+}
+
+.doorMore {
+  display: inline-block;
+  margin-top: 0.75rem;
+  border-bottom: 3px solid currentColor;
+  line-height: 1.15;
+}
+
+.marquee {
+  overflow: hidden;
+  padding-block: clamp(1rem, 3vh, 2rem);
+  background: var(--color-bancha);
+  color: var(--color-calamine);
+}
+
+.marqueeTrack {
+  display: flex;
+  width: max-content;
+  animation: marquee 34s linear infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marqueeItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34em;
+  padding-right: 0.34em;
+  font-size: clamp(3rem, 8.4vw, 8.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.marqueeDot {
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+}
+
+.open {
+  position: relative;
+  padding-block: clamp(5rem, 13vh, 9rem) clamp(7rem, 17vh, 12rem);
+  background: var(--color-lulworth);
+  color: var(--color-hague);
+}
+
+.openLead {
+  max-width: 24em;
+  margin-top: 1.25rem;
+}
+
+.email {
+  display: inline-block;
+  margin-top: clamp(1.75rem, 5vh, 3rem);
+  font-size: min(7.7vw, 7.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  background-image: linear-gradient(var(--color-romesco), var(--color-romesco));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0 0.09em;
+  transition: background-size 480ms var(--ease-roll);
+}
+
+.email:hover,
+.email:focus-visible {
+  background-size: 100% 0.09em;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: clamp(1.75rem, 5vh, 3rem);
+}
+
+@media (max-width: 760px) {
+  .doors {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .frame {
+    aspect-ratio: 4 / 5;
+  }
+
+  .leafNumber {
+    font-size: 8rem;
+  }
+
+  .rosette {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin: 2rem 0 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .door[data-reveal] .leaf {
+    transform: rotateY(40deg);
+  }
+  .rosetteSpin,
+  .marqueeTrack {
+    animation: none;
+  }
+}

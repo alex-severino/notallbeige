@@ -1,0 +1,139 @@
+.section {
+  padding-top: clamp(6rem, 15vh, 10rem);
+  background: var(--color-aulait);
+  color: var(--color-hague);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 3rem;
+  margin-bottom: clamp(2.5rem, 7vh, 4.5rem);
+}
+
+.head h2 {
+  max-width: 7.6em;
+}
+
+.lead {
+  max-width: 19em;
+  margin-bottom: 0.35em;
+}
+
+.stripes {
+  display: flex;
+  height: clamp(30rem, 84vh, 52rem);
+}
+
+.stripe {
+  flex: 1 1 0;
+  min-width: 0;
+  background: var(--paint);
+  color: var(--ink);
+  transition: flex-grow 620ms var(--ease-settle);
+}
+
+.stripe[data-active="true"] {
+  flex-grow: 5.2;
+}
+
+.button {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.button:focus-visible {
+  outline-offset: -8px;
+}
+
+.name {
+  position: absolute;
+  bottom: 1.1rem;
+  left: 50%;
+  font-size: clamp(1.5rem, 2.6vw, 2.75rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  white-space: nowrap;
+  transform: translateX(-50%) rotate(180deg);
+  writing-mode: vertical-rl;
+  transition: opacity 240ms ease;
+}
+
+.detail {
+  position: absolute;
+  inset: auto clamp(1rem, 2vw, 2rem) clamp(1rem, 2vw, 1.75rem);
+  width: min(23rem, calc(100vw - 2rem));
+  opacity: 0;
+  transform: translateY(0.6rem);
+  transition:
+    opacity 300ms ease,
+    transform 500ms var(--ease-settle);
+}
+
+.code {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.note {
+  display: block;
+  font-size: clamp(1.75rem, 3vw, 3rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.stripe[data-active="true"] .name {
+  top: clamp(1rem, 2vw, 1.75rem);
+  bottom: auto;
+  left: clamp(1rem, 2vw, 2rem);
+  font-size: clamp(2.25rem, 4.6vw, 4.75rem);
+  transform: none;
+  writing-mode: horizontal-tb;
+}
+
+.stripe[data-active="true"] .detail {
+  opacity: 1;
+  transform: none;
+  transition-delay: 160ms;
+}
+
+@media (max-width: 760px) {
+  .stripes {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .stripe {
+    flex: none;
+    height: 4.25rem;
+    transition: height 520ms var(--ease-settle);
+  }
+
+  .stripe[data-active="true"] {
+    height: 16rem;
+  }
+
+  .name,
+  .stripe[data-active="true"] .name {
+    top: 1rem;
+    bottom: auto;
+    left: 1rem;
+    font-size: 2.125rem;
+    transform: none;
+    writing-mode: horizontal-tb;
+  }
+}

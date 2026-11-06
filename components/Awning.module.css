@@ -1,0 +1,118 @@
+.awning {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-inline: clamp(0.75rem, 2.2vw, 2.25rem);
+  pointer-events: none;
+}
+
+.tabs {
+  display: flex;
+}
+
+/* Tabs are taller than they look: the extra sits above the viewport so they can drop on hover. */
+.tab {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 92px;
+  margin-top: -32px;
+  padding: 0 clamp(0.75rem, 1.35vw, 1.5rem) 1.15rem;
+  border: 0;
+  border-radius: 0 0 50% 50% / 0 0 22px 22px;
+  background: var(--tab);
+  color: var(--tab-ink);
+  box-shadow: 0 3px 0 var(--color-aulait);
+  font: inherit;
+  font-size: clamp(0.9375rem, 0.82rem + 0.28vw, 1.125rem);
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 320ms var(--ease-settle);
+}
+
+.tab:hover,
+.tab:focus-visible {
+  transform: translateY(9px);
+}
+
+.tab[aria-current="page"] {
+  transform: translateY(14px);
+}
+
+.tab:focus-visible {
+  outline-offset: -6px;
+}
+
+.home {
+  width: clamp(168px, 17vw, 228px);
+  padding-inline: 1.15rem;
+  padding-bottom: 1.05rem;
+  box-shadow: 0 3px 0 var(--color-romesco);
+}
+
+.logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.menuButton {
+  display: none;
+  min-width: 84px;
+}
+
+.menu {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .tabs {
+    display: none;
+  }
+
+  .menuButton {
+    display: flex;
+  }
+
+  .menu {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+  }
+
+  .menu[data-open="true"] {
+    pointer-events: auto;
+  }
+
+  .menuLink {
+    position: relative;
+    z-index: var(--index);
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: -22px;
+    padding: 0 1rem 1.9rem;
+    border-radius: 0 0 50% 50% / 0 0 26px 26px;
+    background: var(--tab);
+    color: var(--tab-ink);
+    font-size: clamp(2.5rem, 13vw, 4.5rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+    transform: translateY(-110vh);
+    transition: transform 520ms var(--ease-settle);
+    transition-delay: calc(var(--index) * 34ms);
+  }
+
+  .menu[data-open="true"] .menuLink {
+    transform: none;
+  }
+}

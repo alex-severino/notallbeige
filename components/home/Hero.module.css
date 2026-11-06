@@ -1,0 +1,224 @@
+.hero {
+  position: relative;
+  height: 340svh;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-sans);
+  font-feature-settings: "ss03";
+}
+
+/* Furniture changes colour as the roller passes. */
+.scene path,
+.scene rect,
+.scene circle,
+.scene text {
+  transition: fill 420ms ease;
+}
+
+.wide {
+  display: block;
+}
+.tall {
+  display: none;
+}
+
+@media (max-aspect-ratio: 1/1) {
+  .wide {
+    display: none;
+  }
+  .tall {
+    display: block;
+  }
+}
+
+.coat {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 100% 0 0);
+  animation: coat 1000ms var(--ease-roll) forwards;
+}
+
+@keyframes coat {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.roller {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: clamp(30px, 3.4vw, 54px);
+  z-index: 4;
+  background: var(--nap);
+  border-inline: 5px solid var(--color-aulait);
+  animation: roller 1000ms var(--ease-roll) forwards;
+  pointer-events: none;
+}
+
+.rollerArm {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: clamp(170px, 22vw, 320px);
+  transform: translateY(-50%);
+  overflow: visible;
+}
+
+@keyframes roller {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100vw);
+  }
+}
+
+/* Opening gag: a wall of old white reading "all beige", rolled away to reveal "not". */
+.curtain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--color-oldwhite);
+  animation: curtain 1150ms 700ms var(--ease-roll) both;
+  pointer-events: none;
+}
+
+@keyframes curtain {
+  from {
+    clip-path: inset(0 0 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 100%);
+    visibility: hidden;
+  }
+}
+
+.introRoller {
+  animation:
+    roller 1150ms 700ms var(--ease-roll) both,
+    appear 1ms 700ms both;
+}
+
+@keyframes appear {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
+}
+
+.controls {
+  position: absolute;
+  z-index: 2;
+  left: clamp(1rem, 3vw, 3rem);
+  bottom: clamp(0.65rem, 1.6vh, 1.1rem);
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: clamp(0.75rem, 1.6vw, 1.5rem);
+  opacity: calc(1 - var(--progress) * 9);
+  pointer-events: auto;
+}
+
+.tins {
+  display: flex;
+  gap: clamp(0.2rem, 0.5vw, 0.5rem);
+}
+
+.tin {
+  width: clamp(30px, 3.5vw, 50px);
+  aspect-ratio: 48 / 58;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: transform 260ms var(--ease-settle);
+}
+
+.tin svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tin:hover,
+.tin:focus-visible {
+  transform: translateY(-6px) rotate(-5deg);
+}
+
+.tin[aria-pressed="true"] {
+  transform: translateY(-9px);
+}
+
+.tin:focus-visible {
+  outline-color: var(--color-aulait);
+}
+
+.note {
+  max-width: 19em;
+  margin: 0;
+  color: var(--color-aulait);
+  font-size: clamp(0.9375rem, 0.82rem + 0.3vw, 1.125rem);
+  line-height: 1.2;
+}
+
+.noteName {
+  display: block;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.coverline {
+  position: absolute;
+  z-index: 2;
+  top: clamp(5.25rem, 12vh, 7rem);
+  right: clamp(1rem, 3vw, 3rem);
+  margin: 0;
+  text-align: right;
+  color: var(--ink);
+  font-size: clamp(1rem, 0.86rem + 0.5vw, 1.375rem);
+  line-height: 1.12;
+  opacity: calc(1 - var(--progress) * 9);
+  transition: color 420ms ease;
+}
+
+@media (max-aspect-ratio: 1/1) {
+  .controls {
+    right: 1rem;
+    left: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+  .tins {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .coverline {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    height: 100svh;
+  }
+  .curtain,
+  .introRoller {
+    display: none;
+  }
+}

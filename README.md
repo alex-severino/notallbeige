@@ -1,0 +1,37 @@
+# not all beige
+
+The website of Not All Beige, Angelina Severino's interior design practice.
+Built with Next.js, Tailwind CSS v4 and CSS Modules. It uses no animation library.
+
+## Development
+
+```sh
+npm install
+npm run dev
+```
+
+Open http://localhost:3000.
+
+```sh
+npm run build
+npm run lint
+```
+
+## Where things live
+
+- `content/site.ts`: all copy, services, rooms, podcasts and the hero colour schemes. Start here to change words or add photographs.
+- `app/globals.css`: the nine palette tokens. Change them and the whole site follows.
+- `components/rooms/`: the illustration kit and the six room elevations.
+- `components/home/Hero.tsx`: the opening gag, repaintable wall and walk through the doorways.
+- `public/brand/`: logo files in SVG and PNG, for dark and light backgrounds.
+
+## Type
+
+Titles and the logo use PP Mori Black. Body copy uses PP Mori Semibold. The stylistic
+set `ss03` gives the two-storey g throughout.
+
+## Adding photographs
+
+Each room in `content/site.ts` has a `photos` array. Add `{ src, alt }` entries and
+place the files in `public/images/`. Photographs use plain `<img>` tags, so they are
+served at their original quality.
