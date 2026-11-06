@@ -168,7 +168,24 @@
 }
 
 .tin[aria-pressed="true"] {
+  --rest: -9px;
   transform: translateY(-9px);
+}
+
+/* Until one is pressed, a hop runs along the tins to show they do something. */
+.tins[data-invite="true"]:not(:hover, :focus-within) .tin {
+  animation: hop 3600ms calc(2400ms + var(--i) * 80ms) infinite;
+}
+
+@keyframes hop {
+  0%,
+  14%,
+  100% {
+    transform: translateY(var(--rest, 0));
+  }
+  7% {
+    transform: translateY(calc(var(--rest, 0px) - 12px)) rotate(-5deg);
+  }
 }
 
 .tin:focus-visible {
@@ -189,10 +206,15 @@
   letter-spacing: -0.02em;
 }
 
+.noteName[data-prompt="true"] {
+  font-size: 1.5em;
+  line-height: 1.05;
+}
+
 .coverline {
   position: absolute;
   z-index: 2;
-  top: clamp(5.25rem, 12vh, 7rem);
+  top: clamp(6.75rem, 12.5vh, 7.5rem);
   right: clamp(1rem, 3vw, 3rem);
   margin: 0;
   text-align: right;
@@ -217,6 +239,9 @@
   .note {
     max-width: none;
   }
+  .noteName[data-prompt="true"] {
+    font-size: 1.25em;
+  }
   .tins {
     width: 100%;
     justify-content: space-between;
@@ -230,11 +255,18 @@
   .noteName {
     display: none;
   }
+  .cue {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hero {
     height: 100svh;
+  }
+  /* The hero doesn't zoom here, so scrolling won't take anyone through the door. */
+  .cue {
+    display: none;
   }
   .curtain,
   .introRoller {

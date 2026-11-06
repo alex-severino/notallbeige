@@ -21,7 +21,9 @@ Production is the Vercel project `notallbeige` in team `alex-severino-projects`,
 ## Design rules
 
 - Titles and the logo are PP Mori Black. Body copy is PP Mori Semibold. Load no other weights.
-- The logo is all caps at -3% tracking. Titles are lowercase with -2% tracking, the tightest lowercase Black takes before letters fuse.
+- The navigation logo is lowercase at -2% tracking, on a sideways sample card. The big hero and footer logo is all caps at -3% tracking. Titles are lowercase with -2% tracking, the tightest lowercase Black takes before letters fuse.
+- The hole in the O is Shallot in the logo. The big hero letters are the exception: their O follows the wall scheme.
+- Plinths are Romesco in every room.
 - Colours are the ten Farrow & Ball tokens in `app/globals.css`. Add no others, and no pure black or white. Romesco is deliberately redder than Farrow & Ball's web swatch, at the user's request: the swatch looks brown next to the real paint.
 - All copy and photographs live in `content/site.ts`. Never invent clients, projects, press or awards: this is a real practice, and that copy is Angelina's to supply.
 - Photographs use plain `<img>` tags at original quality, not `next/image`.

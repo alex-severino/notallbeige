@@ -9,7 +9,7 @@ import styles from "./Awning.module.css";
 
 const tabStyle = (color: string, ink: string) => ({ "--tab": color, "--tab-ink": ink }) as CSSProperties;
 
-/** The site's navigation: a striped awning hanging from the top of every page. */
+/** The site's navigation: paint sample cards hanging from the top of every page, the logo on its side. */
 export function Awning() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -36,7 +36,7 @@ export function Awning() {
           aria-label="not all beige, home"
           onClick={() => setOpen(false)}
         >
-          <Logo className={styles.logo} title="not all beige" />
+          <Logo variant="lower" className={styles.logo} title="not all beige" />
         </Link>
 
         <nav className={styles.tabs} aria-label="Main">

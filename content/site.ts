@@ -66,6 +66,11 @@ export const nav: NavItem[] = [
 ];
 
 export const home = {
+  hero: {
+    coverline: ["signature interiors by", "angelina severino"],
+    scrollCue: "scroll to come in",
+    tinPrompt: { title: "press a tin", body: "Go on, repaint the room." },
+  },
   intro: {
     title: "life’s too short for magnolia.",
     lead: "Not All Beige is the interior design practice of Angelina Severino, based in London. We make homes that look like the people who live in them.",
@@ -168,6 +173,7 @@ export const rooms: Room[] = [
     scheme: [
       { part: "walls", paint: "hague" },
       { part: "front door", paint: "romesco" },
+      { part: "plinths", paint: "romesco" },
     ],
     photos: [],
   },
@@ -188,20 +194,27 @@ export const rooms: Room[] = [
     title: "the kitchen",
     paint: "calamine",
     ink: "hague",
-    story: "Calamine from the units to the ceiling: a soft, warm pink that makes toast feel like an occasion.",
-    scheme: [{ part: "walls and units", paint: "calamine" }],
+    story: "Calamine walls, a soft, warm pink that makes toast feel like an occasion, over a Hague Blue backsplash and cupboards, with a Bancha range cooker and a blue and white geometric floor.",
+    scheme: [
+      { part: "walls", paint: "calamine" },
+      { part: "cupboards and backsplash", paint: "hague" },
+      { part: "range cooker", paint: "bancha" },
+      { part: "plinths", paint: "romesco" },
+      { part: "floor", paint: "hague", label: "blue and white tiles" },
+    ],
     photos: [],
   },
   {
-    slug: "dining-room",
-    title: "the dining room",
-    paint: "aulait",
+    slug: "living-room",
+    title: "the living room",
+    paint: "lulworth",
     ink: "hague",
-    story: "Romesco walls held between Au Lait above and below. Red keeps people at the table, and that is the whole idea.",
+    story: "Lulworth Blue walls under an Au Lait ceiling, with every plinth in Romesco. A clear sky of a room, with a red line drawn under it.",
     scheme: [
+      { part: "walls", paint: "lulworth" },
       { part: "ceiling", paint: "aulait" },
-      { part: "walls", paint: "romesco" },
-      { part: "woodwork", paint: "aulait" },
+      { part: "plinths", paint: "romesco" },
+      { part: "armchairs", paint: "calamine" },
     ],
     photos: [],
   },
@@ -214,6 +227,7 @@ export const rooms: Room[] = [
     scheme: [
       { part: "woodwork", paint: "bancha" },
       { part: "walls", paint: "romesco", label: "dot wallpaper" },
+      { part: "plinths", paint: "romesco" },
     ],
     photos: [],
   },
@@ -222,7 +236,7 @@ export const rooms: Room[] = [
     title: "the children’s bedroom",
     paint: "macadamia",
     ink: "hague",
-    story: "Roasted Macadamia walls with Romesco and Au Lait, and one band of Stripe wallpaper running against the ceiling like the edge of a circus tent.",
+    story: "Roasted Macadamia walls with Romesco and Au Lait, and Stripe wallpaper turned on its side, so one red line runs along under the ceiling.",
     scheme: [
       { part: "walls", paint: "macadamia" },
       { part: "woodwork", paint: "romesco" },
@@ -241,6 +255,8 @@ export const rooms: Room[] = [
       { part: "walls", paint: "oldwhite" },
       { part: "bath", paint: "romesco" },
       { part: "tiles", paint: "india" },
+      { part: "floor", paint: "bancha", label: "bancha and old white" },
+      { part: "plinths", paint: "romesco" },
     ],
     photos: [],
   },
@@ -298,23 +314,22 @@ export type HeroScheme = {
   b: PaintKey;
   trim: PaintKey;
   floor: PaintKey;
-  chairA: PaintKey;
-  chairB: PaintKey;
-  seat: PaintKey;
+  bloom: PaintKey;
+  vase: PaintKey;
   shade: PaintKey;
   fringe: PaintKey;
   room: PaintKey;
 };
 
 export const heroSchemes: Record<PaintKey, HeroScheme> = {
-  romesco: { ink: "aulait", a: "india", b: "lulworth", trim: "aulait", floor: "hague", chairA: "shallot", chairB: "calamine", seat: "india", shade: "india", fringe: "hague", room: "lulworth" },
-  lulworth: { ink: "hague", a: "romesco", b: "india", trim: "aulait", floor: "hague", chairA: "romesco", chairB: "shallot", seat: "india", shade: "romesco", fringe: "india", room: "india" },
-  india: { ink: "hague", a: "romesco", b: "lulworth", trim: "aulait", floor: "bancha", chairA: "hague", chairB: "lulworth", seat: "romesco", shade: "hague", fringe: "romesco", room: "romesco" },
-  shallot: { ink: "hague", a: "romesco", b: "india", trim: "aulait", floor: "romesco", chairA: "bancha", chairB: "hague", seat: "india", shade: "romesco", fringe: "india", room: "bancha" },
-  calamine: { ink: "romesco", a: "india", b: "lulworth", trim: "aulait", floor: "bancha", chairA: "romesco", chairB: "hague", seat: "india", shade: "bancha", fringe: "romesco", room: "bancha" },
-  bancha: { ink: "calamine", a: "romesco", b: "india", trim: "calamine", floor: "hague", chairA: "shallot", chairB: "romesco", seat: "india", shade: "india", fringe: "romesco", room: "shallot" },
-  hague: { ink: "aulait", a: "romesco", b: "india", trim: "aulait", floor: "bancha", chairA: "shallot", chairB: "romesco", seat: "india", shade: "india", fringe: "romesco", room: "romesco" },
-  aulait: { ink: "romesco", a: "india", b: "lulworth", trim: "oldwhite", floor: "hague", chairA: "romesco", chairB: "shallot", seat: "india", shade: "hague", fringe: "romesco", room: "romesco" },
-  macadamia: { ink: "hague", a: "romesco", b: "india", trim: "aulait", floor: "hague", chairA: "romesco", chairB: "shallot", seat: "india", shade: "romesco", fringe: "hague", room: "romesco" },
-  oldwhite: { ink: "hague", a: "romesco", b: "india", trim: "aulait", floor: "hague", chairA: "aulait", chairB: "oldwhite", seat: "aulait", shade: "aulait", fringe: "hague", room: "romesco" },
+  romesco: { ink: "aulait", a: "india", b: "lulworth", trim: "aulait", floor: "hague", bloom: "shallot", vase: "india", shade: "india", fringe: "hague", room: "lulworth" },
+  lulworth: { ink: "hague", a: "romesco", b: "india", trim: "aulait", floor: "hague", bloom: "romesco", vase: "india", shade: "romesco", fringe: "india", room: "india" },
+  india: { ink: "hague", a: "romesco", b: "lulworth", trim: "aulait", floor: "bancha", bloom: "hague", vase: "romesco", shade: "hague", fringe: "romesco", room: "romesco" },
+  shallot: { ink: "hague", a: "romesco", b: "india", trim: "aulait", floor: "romesco", bloom: "bancha", vase: "india", shade: "romesco", fringe: "india", room: "bancha" },
+  calamine: { ink: "romesco", a: "india", b: "lulworth", trim: "aulait", floor: "bancha", bloom: "romesco", vase: "india", shade: "bancha", fringe: "romesco", room: "bancha" },
+  bancha: { ink: "calamine", a: "romesco", b: "india", trim: "calamine", floor: "hague", bloom: "shallot", vase: "india", shade: "india", fringe: "romesco", room: "shallot" },
+  hague: { ink: "aulait", a: "romesco", b: "india", trim: "aulait", floor: "bancha", bloom: "shallot", vase: "india", shade: "india", fringe: "romesco", room: "romesco" },
+  aulait: { ink: "romesco", a: "india", b: "lulworth", trim: "oldwhite", floor: "hague", bloom: "romesco", vase: "india", shade: "hague", fringe: "romesco", room: "romesco" },
+  macadamia: { ink: "hague", a: "romesco", b: "india", trim: "aulait", floor: "hague", bloom: "romesco", vase: "india", shade: "romesco", fringe: "hague", room: "romesco" },
+  oldwhite: { ink: "hague", a: "romesco", b: "india", trim: "aulait", floor: "hague", bloom: "aulait", vase: "aulait", shade: "aulait", fringe: "hague", room: "romesco" },
 };

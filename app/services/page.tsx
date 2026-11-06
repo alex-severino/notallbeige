@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services" },
 };
 
-const illustrations = ["dining-room", "kitchen", "hallway"];
+const illustrations = ["living-room", "kitchen", "hallway"];
 const stepColours: PaintKey[] = ["shallot", "india", "lulworth", "calamine"];
 
 export default function ServicesPage() {

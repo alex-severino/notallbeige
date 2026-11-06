@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { LogoShapes } from "@/components/brand/Logo";
 import { stackedMark } from "@/components/brand/logo-data";
-import { Enfilade, FloorLamp, Frame, PedestalTable, Pendant, ShellChair, Vase, type EnfiladeRoom } from "@/components/rooms/parts";
-import { findPaint, heroSchemes, paint, paints, type PaintKey } from "@/content/site";
+import { Enfilade, FloorLamp, Frame, PedestalTable, Pendant, Vase, type EnfiladeRoom } from "@/components/rooms/parts";
+import { findPaint, heroSchemes, home, paint, paints, type PaintKey } from "@/content/site";
 import styles from "./Hero.module.css";
 
 /** Each doorway is this much smaller than the last. */
@@ -29,8 +29,7 @@ type Layout = {
   logo: { x: number; y: number; size: number };
   door: { cx: number; halfWidth: number; height: number };
   vanish: [number, number];
-  chair: { x: number; s: number };
-  mat: { width: number; size: number };
+  cue: { size: number; drop: number };
   wide: boolean;
 };
 
@@ -41,8 +40,7 @@ const LANDSCAPE: Layout = {
   logo: { x: 72, y: 150, size: 276 },
   door: { cx: 1204, halfWidth: 186, height: 662 },
   vanish: [1204, 612],
-  chair: { x: 960, s: 0.66 },
-  mat: { width: 300, size: 30 },
+  cue: { size: 30, drop: 58 },
   wide: true,
 };
 
@@ -53,8 +51,7 @@ const PORTRAIT: Layout = {
   logo: { x: 32, y: 176, size: 256 },
   door: { cx: 556, halfWidth: 176, height: 590 },
   vanish: [556, 1160],
-  chair: { x: 196, s: 0.6 },
-  mat: { width: 260, size: 30 },
+  cue: { size: 34, drop: 44 },
   wide: false,
 };
 
@@ -65,7 +62,7 @@ const logoTransform = ({ logo }: Layout) => {
 };
 
 function Furnishings({ layout }: { layout: Layout }) {
-  const { floor, chair, wide } = layout;
+  const { floor, wide } = layout;
   return (
     <>
       {wide ? (
@@ -75,14 +72,13 @@ function Furnishings({ layout }: { layout: Layout }) {
             <rect y={116} width={120} height={50} fill="var(--floor)" />
           </Frame>
           <PedestalTable x={1510} y={floor + 4} width={166} height={252} top="var(--trim)" leg="var(--floor)" />
-          <Vase x={1510} y={floor - 248} s={0.6} body="var(--seat)" stem="var(--ink)" bloomA="var(--pb)" bloomB="var(--chair-a)" />
-          <Pendant x={chair.x} y={276} width={224} shade="var(--shade)" fringe="var(--fringe)" cord="var(--trim)" />
+          <Vase x={1510} y={floor - 248} s={0.6} body="var(--vase)" stem="var(--ink)" bloomA="var(--pb)" bloomB="var(--bloom)" />
+          <Pendant x={960} y={276} width={224} shade="var(--shade)" fringe="var(--fringe)" cord="var(--trim)" />
         </>
       ) : null}
       {!wide ? (
         <FloorLamp x={72} y={floor + 2} s={0.56} height={470} shade="var(--shade)" stripe="var(--pb)" fringe="var(--fringe)" stem="var(--trim)" />
       ) : null}
-      <ShellChair x={chair.x} y={floor + 8} s={chair.s} a="var(--chair-a)" b="var(--chair-b)" seat="var(--seat)" leg="var(--trim)" />
     </>
   );
 }
@@ -96,12 +92,12 @@ function Scene({
   className: string;
   worldRef: React.RefObject<SVGGElement | null>;
 }) {
-  const { width, height, floor, door, mat } = layout;
+  const { width, height, floor, door, cue } = layout;
   return (
     <svg className={`${styles.scene} ${className}`} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMax meet" aria-hidden="true">
       <g ref={worldRef}>
         <rect x={-9000} y={floor} width={20000} height={9000} fill="var(--floor)" />
-        <rect x={-9000} y={floor - 22} width={20000} height={22} fill="var(--trim)" />
+        <rect x={-9000} y={floor - 44} width={20000} height={44} fill="var(--trim)" />
         <g transform={logoTransform(layout)}>
           <LogoShapes mark={stackedMark} ink="var(--ink)" paintA="var(--pa)" paintB="var(--pb)" />
         </g>
@@ -116,14 +112,9 @@ function Scene({
           frameFill="var(--trim)"
           depth={DEPTH}
         />
-        {layout.wide ? (
-          <>
-            <rect x={door.cx - mat.width / 2} y={floor + 14} width={mat.width} height={58} rx={6} fill="var(--pa)" />
-            <text x={door.cx} y={floor + 53} textAnchor="middle" fontSize={mat.size} fontWeight={900} fill="var(--ink-mat)" letterSpacing="-0.02em">
-              come in
-            </text>
-          </>
-        ) : null}
+        <text className={styles.cue} x={door.cx} y={floor + cue.drop} textAnchor="middle" fontSize={cue.size} fontWeight={900} fill="var(--trim)" letterSpacing="-0.02em">
+          {home.hero.scrollCue}
+        </text>
         <Furnishings layout={layout} />
       </g>
     </svg>
@@ -155,14 +146,12 @@ function schemeVars(key: PaintKey): CSSProperties {
   const scheme = heroSchemes[key];
   return {
     "--ink": paint(scheme.ink),
-    "--ink-mat": paint(scheme.a === "romesco" ? "aulait" : "hague"),
     "--pa": paint(scheme.a),
     "--pb": paint(scheme.b),
     "--trim": paint(scheme.trim),
     "--floor": paint(scheme.floor),
-    "--chair-a": paint(scheme.chairA),
-    "--chair-b": paint(scheme.chairB),
-    "--seat": paint(scheme.seat),
+    "--bloom": paint(scheme.bloom),
+    "--vase": paint(scheme.vase),
     "--shade": paint(scheme.shade),
     "--fringe": paint(scheme.fringe),
     "--room": paint(scheme.room),
@@ -177,7 +166,9 @@ export function Hero() {
   const [scheme, setScheme] = useState<PaintKey>("romesco");
   const [coat, setCoat] = useState<{ to: PaintKey; id: number } | null>(null);
   const [intro, setIntro] = useState(() => !introPlayed);
-  const [note, setNote] = useState<PaintKey>("romesco");
+  // Null until a tin has been touched: the note invites people to try one.
+  const [note, setNote] = useState<PaintKey | null>(null);
+  const [played, setPlayed] = useState(false);
 
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -227,6 +218,7 @@ export function Hero() {
 
   function repaint(next: PaintKey) {
     setNote(next);
+    setPlayed(true);
     if (next === wall || coat) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
@@ -245,7 +237,8 @@ export function Hero() {
     );
   }
 
-  const current = findPaint(note);
+  const current = note ? findPaint(note) : null;
+  const rest = played ? wall : null;
 
   return (
     <section ref={sectionRef} className={styles.hero} aria-label="Welcome">
@@ -264,22 +257,25 @@ export function Hero() {
 
         <div className={styles.controls}>
           <p className={styles.note} aria-live="polite">
-            <span className={styles.noteName}>{current.name}</span>
-            {current.note}
+            <span className={styles.noteName} data-prompt={!current}>
+              {current ? current.name : home.hero.tinPrompt.title}
+            </span>
+            {current ? current.note : home.hero.tinPrompt.body}
           </p>
-          <div className={styles.tins} role="group" aria-label="Repaint the wall">
-            {paints.map((item) => (
+          <div className={styles.tins} data-invite={!played} role="group" aria-label="Repaint the wall">
+            {paints.map((item, index) => (
               <button
                 key={item.key}
                 type="button"
                 className={styles.tin}
+                style={{ "--i": index } as CSSProperties}
                 aria-label={`Paint the wall ${item.name}`}
                 aria-pressed={wall === item.key}
                 onClick={() => repaint(item.key)}
                 onPointerEnter={() => setNote(item.key)}
-                onPointerLeave={() => setNote(wall)}
+                onPointerLeave={() => setNote(rest)}
                 onFocus={() => setNote(item.key)}
-                onBlur={() => setNote(wall)}
+                onBlur={() => setNote(rest)}
               >
                 <Tin color={paint(item.key)} />
               </button>
@@ -288,9 +284,9 @@ export function Hero() {
         </div>
 
         <p className={styles.coverline}>
-          interiors by
+          {home.hero.coverline[0]}
           <br />
-          angelina severino
+          {home.hero.coverline[1]}
         </p>
 
         {intro ? (

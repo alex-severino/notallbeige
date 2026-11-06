@@ -259,9 +259,11 @@
 
 /* Shop */
 .shopHero {
+  /* The longest drip scales with the page width, so its box and the title must clear it. */
+  --drip-height: max(clamp(13rem, 38vh, 22rem), calc(100vw * 400 / 1578));
   position: relative;
   overflow: hidden;
-  padding-top: clamp(13rem, 42vh, 24rem);
+  padding-top: max(clamp(13rem, 42vh, 24rem), calc(var(--drip-height) + 1.5rem));
   padding-bottom: clamp(3.5rem, 9vh, 6.5rem);
   background: var(--color-shallot);
   color: var(--color-hague);
@@ -271,7 +273,7 @@
   position: absolute;
   inset: 0 0 auto;
   width: 100%;
-  height: clamp(13rem, 38vh, 22rem);
+  height: var(--drip-height);
   transform-origin: top;
   animation: drip 2400ms var(--ease-settle) both;
 }

@@ -8,8 +8,10 @@ import {
   PedestalTable,
   Pendant,
   perspectiveTiles,
+  PinwheelTiles,
   Rug,
   scallops,
+  ShellChair,
   stripeBands,
   TableLamp,
   Vase,
@@ -18,13 +20,15 @@ import {
 const W = 1200;
 const H = 900;
 const FLOOR = 770;
+const PLINTH = 40;
 
 /** The same paint in shadow, for depth without bringing in another colour. */
 const shade = (base: PaintKey, into: PaintKey, amount: number) =>
   `color-mix(in srgb, ${c(base)} ${100 - amount}%, ${c(into)})`;
 
-function Skirting({ fill = c("aulait") }: { fill?: string }) {
-  return <rect y={FLOOR - 20} width={W} height={20} fill={fill} />;
+/** Every room's plinth is Romesco. */
+function Plinth() {
+  return <rect y={FLOOR - PLINTH} width={W} height={PLINTH} fill={c("romesco")} />;
 }
 
 function Entrance() {
@@ -40,7 +44,7 @@ function Entrance() {
     <>
       <rect width={W} height={H} fill={c("hague")} />
       <Checks x={0} y={FLOOR} width={W} height={H - FLOOR} size={65} a={c("aulait")} b={c("hague")} />
-      <Skirting />
+      <Plinth />
       {/* stairs */}
       <rect y={FLOOR - steps * rise} width={edge - steps * tread} height={steps * rise} fill={c("aulait")} />
       <path d={stairs} fill={c("aulait")} />
@@ -117,8 +121,8 @@ function Hallway() {
       <path d={`M0 ${H}H${W}L${back.right} ${back.bottom}H${back.left}Z`} fill={c("aulait")} />
       <path d={perspectiveTiles({ vanish, left: 0, right: W, floor: H, near: 1, far: 1 / end, columns: 8, rows: 12 })} fill={c("hague")} />
       {/* skirting, doors and pictures, all in the same Romesco */}
-      <path d={patch(-1, 1, 1 / end, 0, 0.05)} fill={trim} />
-      <path d={patch(1, 1, 1 / end, 0, 0.05)} fill={trim} />
+      <path d={patch(-1, 1, 1 / end, 0, 0.1)} fill={trim} />
+      <path d={patch(1, 1, 1 / end, 0, 0.1)} fill={trim} />
       {([-1, 1] as const).map((side) => (
         <g key={side}>
           <path d={patch(side, 1.3, 1.82, 0, 0.74)} fill={trim} />
@@ -140,7 +144,7 @@ function Hallway() {
 }
 
 function Kitchen() {
-  const line = shade("calamine", "romesco", 26);
+  const line = shade("hague", "lulworth", 30);
   const plates = [
     { x: 126, r: 54, fill: "romesco" },
     { x: 246, r: 42, fill: "india" },
@@ -149,12 +153,13 @@ function Kitchen() {
     { x: 960, r: 44, fill: "hague" },
     { x: 1078, r: 52, fill: "romesco" },
   ] as const;
-  const doors = [24, 196, 368, 748, 920, 1062];
+  const doors = [24, 168, 312, 762, 906, 1050];
+  const doorWidth = 126;
   return (
     <>
       <rect width={W} height={H} fill={c("calamine")} />
-      <Checks x={0} y={344} width={W} height={198} size={49.5} a={c("aulait")} b={shade("calamine", "romesco", 10)} />
-      <Checks x={0} y={FLOOR} width={W} height={H - FLOOR} size={65} a={c("aulait")} b={c("romesco")} />
+      <rect y={344} width={W} height={198} fill={c("hague")} />
+      <PinwheelTiles x={0} y={FLOOR} width={W} height={H - FLOOR} size={65} a={c("aulait")} b={c("hague")} />
       {[{ x: 60, w: 340 }, { x: 800, w: 340 }].map((shelf) => (
         <rect key={shelf.x} x={shelf.x} y={300} width={shelf.w} height={14} fill={c("hague")} />
       ))}
@@ -165,28 +170,26 @@ function Kitchen() {
         </g>
       ))}
       {/* units */}
-      <rect y={542} width={W} height={228} fill={c("calamine")} />
+      <rect y={542} width={W} height={228} fill={c("hague")} />
       <rect y={526} width={W} height={18} fill={c("aulait")} />
-      {doors.map((x, i) => {
-        const width = i === 5 ? 118 : 150;
-        return (
-          <g key={x}>
-            <rect x={x} y={566} width={width} height={186} fill={line} />
-            <rect x={x + 8} y={574} width={width - 16} height={170} fill={c("calamine")} />
-            <circle cx={x + width / 2} cy={600} r={9} fill={c("romesco")} />
-          </g>
-        );
-      })}
+      <rect y={FLOOR - PLINTH} width={W} height={PLINTH} fill={c("romesco")} />
+      {doors.map((x) => (
+        <g key={x}>
+          <rect x={x} y={558} width={doorWidth} height={160} fill={line} />
+          <rect x={x + 8} y={566} width={doorWidth - 16} height={144} fill={c("hague")} />
+          <circle cx={x + doorWidth / 2} cy={592} r={9} fill={c("india")} />
+        </g>
+      ))}
       {/* range and hood */}
       <path d="M432 92H768L812 344H388Z" fill={shade("calamine", "romesco", 9)} />
       <rect x={388} y={344} width={424} height={20} fill={c("aulait")} />
-      <rect x={456} y={494} width={288} height={276} fill={c("hague")} />
+      <rect x={456} y={494} width={288} height={276} fill={c("bancha")} />
       <rect x={456} y={478} width={288} height={18} fill={c("aulait")} />
       {[496, 556, 616, 676].map((x) => (
         <circle key={x} cx={x + 14} cy={530} r={15} fill={c("india")} />
       ))}
       <rect x={480} y={574} width={240} height={164} rx={10} fill={c("aulait")} />
-      <rect x={498} y={592} width={204} height={128} rx={6} fill={c("romesco")} />
+      <rect x={498} y={592} width={204} height={128} rx={6} fill={c("hague")} />
       <rect x={520} y={556} width={160} height={10} rx={5} fill={c("india")} />
       <Pendant x={190} y={170} width={190} shade={c("romesco")} fringe={c("hague")} cord={c("hague")} />
       <Pendant x={1010} y={170} width={190} shade={c("romesco")} fringe={c("hague")} cord={c("hague")} />
@@ -194,48 +197,47 @@ function Kitchen() {
   );
 }
 
-function DiningRoom() {
+function LivingRoom() {
+  const deep = shade("lulworth", "hague", 24);
   return (
     <>
-      <rect width={W} height={H} fill={c("romesco")} />
+      <rect width={W} height={H} fill={c("lulworth")} />
       <Frieze width={W} depth={64} fill={c("aulait")} count={16} />
-      <Frame x={84} y={196} w={214} h={286} frame={c("aulait")} mat={c("romesco")}>
-        <rect x={14} y={14} width={186} height={258} fill={c("aulait")} />
-        <circle cx={107} cy={116} r={66} fill={c("romesco")} />
-        <rect x={14} y={200} width={186} height={72} fill={c("romesco")} />
+      <Frame x={108} y={196} w={184} h={246} frame={c("aulait")} mat={c("lulworth")}>
+        <rect x={14} y={14} width={156} height={218} fill={c("aulait")} />
+        <circle cx={92} cy={100} r={54} fill={c("lulworth")} />
+        <rect x={14} y={172} width={156} height={60} fill={c("lulworth")} />
       </Frame>
-      <Frame x={902} y={196} w={214} h={286} frame={c("aulait")} mat={c("romesco")}>
-        <rect x={14} y={14} width={186} height={258} fill={c("aulait")} />
-        <path d={arch(107, 272, 66, 214)} fill={c("romesco")} />
-        <circle cx={107} cy={150} r={26} fill={c("aulait")} />
+      <Frame x={908} y={196} w={184} h={246} frame={c("aulait")} mat={c("lulworth")}>
+        <rect x={14} y={14} width={156} height={218} fill={c("aulait")} />
+        <path d={arch(92, 232, 54, 180)} fill={c("lulworth")} />
+        <circle cx={92} cy={130} r={22} fill={c("aulait")} />
       </Frame>
-      <Checks x={0} y={FLOOR} width={W} height={H - FLOOR} size={65} a={c("aulait")} b={c("romesco")} />
-      <Skirting />
-      {/* end chairs */}
-      {[-1, 1].map((side) => (
-        <g key={side} transform={`translate(${600 + side * 452} ${FLOOR}) scale(${side === 1 ? 1 : -1} 1)`}>
-          <rect x={26} y={-370} width={40} height={370} rx={20} fill={c("aulait")} />
-          <rect x={-112} y={-196} width={178} height={38} rx={19} fill={c("aulait")} />
-          <rect x={-108} y={-170} width={24} height={170} rx={12} fill={c("aulait")} />
-        </g>
-      ))}
-      {/* table and cloth */}
-      <path d="M312 640 296 770H334L352 640ZM888 640 904 770H866L848 640Z" fill={c("aulait")} />
-      <rect x={256} y={530} width={688} height={16} rx={8} fill={c("aulait")} />
-      <rect x={268} y={542} width={664} height={84} fill={c("aulait")} />
-      {Array.from({ length: 13 }, (_, i) => (
-        <rect key={i} x={268 + i * (664 / 13)} y={542} width={664 / 26} height={84} fill={c("romesco")} />
-      ))}
-      <path d={scallops(268, 932, 626, 13, 26, 2)} fill={c("aulait")} />
-      {/* table top */}
-      <Vase x={600} y={530} s={0.5} body={c("aulait")} stem={c("aulait")} bloomA={c("aulait")} bloomB={c("aulait")} />
-      {[420, 780].map((x) => (
+      <Checks x={0} y={FLOOR} width={W} height={H - FLOOR} size={65} a={c("aulait")} b={deep} />
+      <Plinth />
+      {/* mirror over the mantel */}
+      <path d={arch(600, 432, 120, 300)} fill={c("aulait")} />
+      <path d={arch(600, 420, 104, 276)} fill={c("lulworth")} />
+      <path d="M546 248A64 64 0 0 1 628 214" fill="none" stroke={c("aulait")} strokeWidth={10} strokeLinecap="round" />
+      {/* fireplace */}
+      <rect x={410} y={470} width={380} height={FLOOR - 470} fill={c("aulait")} />
+      <rect x={386} y={448} width={428} height={24} rx={12} fill={c("aulait")} />
+      <rect x={410} y={FLOOR - PLINTH} width={380} height={PLINTH} fill={c("romesco")} />
+      <path d={arch(600, FLOOR, 104, 236)} fill={shade("lulworth", "hague", 55)} />
+      <rect x={380} y={FLOOR} width={440} height={24} fill={c("romesco")} />
+      {/* on the mantel */}
+      <Vase x={430} y={448} s={0.46} body={c("aulait")} stem={c("aulait")} bloomA={c("aulait")} bloomB={c("aulait")} />
+      {[750, 782].map((x, i) => (
         <g key={x}>
-          <path d={`M${x - 24} 530H${x + 24}L${x + 8} 500V430H${x - 8}V500Z`} fill={c("aulait")} />
-          <rect x={x - 7} y={372} width={14} height={60} rx={7} fill={c("aulait")} />
+          <path d={`M${x - 14} 448H${x + 14}L${x + 5} 430V${380 + i * 20}H${x - 5}V430Z`} fill={c("aulait")} />
+          <rect x={x - 5} y={340 + i * 20} width={10} height={40} rx={5} fill={c("aulait")} />
         </g>
       ))}
-      <Pendant x={600} y={298} width={300} shade={c("aulait")} fringe={c("aulait")} cord={c("aulait")} />
+      {/* armchairs either side of the fire */}
+      {[200, 1000].map((x) => (
+        <ShellChair key={x} x={x} y={FLOOR} s={0.62} a={c("calamine")} b={shade("calamine", "romesco", 16)} seat={c("calamine")} leg={c("aulait")} />
+      ))}
+      <Rug x={300} y={812} width={600} height={58} a={c("romesco")} b={c("india")} stripes={15} />
     </>
   );
 }
@@ -259,7 +261,7 @@ function Bedroom() {
       <rect y={PAPER_DEPTH} width={W} height={FLOOR - PAPER_DEPTH} fill={c("bancha")} />
       <rect y={PAPER_DEPTH - 8} width={W} height={14} fill={c("bancha")} />
       <rect y={FLOOR} width={W} height={H - FLOOR} fill={c("hague")} />
-      <Skirting fill={shade("bancha", "hague", 30)} />
+      <Plinth />
       {lobes.map((lobe) => (
         <rect key={lobe.x} x={lobe.x - 66} y={lobe.top} width={132} height={FLOOR - lobe.top - 60} rx={66} fill={c("bancha")} />
       ))}
@@ -284,20 +286,20 @@ function Bedroom() {
 }
 
 function ChildrensBedroom() {
-  const band = 132;
+  const band = 161;
   return (
     <>
       <rect width={W} height={H} fill={c("macadamia")} />
-      {/* one band of Stripe wallpaper against the ceiling */}
-      {stripeBands(W, 420).map((stripe) => (
-        <rect key={stripe.x} x={stripe.x} width={stripe.width + 0.5} height={band} fill={c(stripe.colour)} />
+      {/* Stripe wallpaper hung on its side against the ceiling, so its red runs along as one line */}
+      {stripeBands(band, 420).map((stripe) => (
+        <rect key={stripe.x} y={stripe.x} width={W} height={stripe.width + 0.5} fill={c(stripe.colour)} />
       ))}
       <rect y={band} width={W} height={12} fill={c("aulait")} />
       <rect y={FLOOR} width={W} height={H - FLOOR} fill={c("aulait")} />
-      <Skirting fill={c("romesco")} />
+      <Plinth />
       <Rug x={140} y={796} width={900} height={70} a={c("romesco")} b={c("shallot")} stripes={15} />
       {/* paper lantern and pictures */}
-      <rect x={520} y={144} width={4} height={90} fill={c("hague")} />
+      <rect x={520} y={band + 12} width={4} height={234 - band - 12} fill={c("hague")} />
       <circle cx={522} cy={296} r={74} fill={c("aulait")} />
       {[
         { x: 128, fill: "romesco" },
@@ -337,8 +339,8 @@ function ChildrensBedroom() {
 function Bathroom() {
   const dado = 438;
   let tiles = "";
-  for (let y = dado + 52; y < FLOOR - 20; y += 52) tiles += `M0 ${y}H${W}`;
-  for (let x = 52; x < W; x += 52) tiles += `M${x} ${dado}V${FLOOR - 20}`;
+  for (let y = dado + 52; y < FLOOR - PLINTH; y += 52) tiles += `M0 ${y}H${W}`;
+  for (let x = 52; x < W; x += 52) tiles += `M${x} ${dado}V${FLOOR - PLINTH}`;
   return (
     <>
       <rect width={W} height={H} fill={c("oldwhite")} />
@@ -346,8 +348,8 @@ function Bathroom() {
       <rect y={dado} width={W} height={FLOOR - dado} fill={c("india")} />
       <path d={tiles} stroke={c("aulait")} strokeWidth={3} fill="none" />
       <rect y={dado - 12} width={W} height={14} fill={c("aulait")} />
-      <Checks x={0} y={FLOOR} width={W} height={H - FLOOR} size={65} a={c("aulait")} b={c("romesco")} />
-      <Skirting />
+      <Checks x={0} y={FLOOR} width={W} height={H - FLOOR} size={65} a={c("oldwhite")} b={c("bancha")} />
+      <Plinth />
       {/* window and blind */}
       <path d={arch(330, 400, 150, 330)} fill={c("aulait")} />
       <path d={arch(330, 386, 130, 300)} fill={c("lulworth")} />
@@ -377,7 +379,7 @@ const art: Record<string, () => React.ReactNode> = {
   entrance: Entrance,
   hallway: Hallway,
   kitchen: Kitchen,
-  "dining-room": DiningRoom,
+  "living-room": LivingRoom,
   bedroom: Bedroom,
   "childrens-bedroom": ChildrensBedroom,
   bathroom: Bathroom,

@@ -5,34 +5,57 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding-inline: clamp(0.75rem, 2.2vw, 2.25rem);
+  padding-right: clamp(0.75rem, 2.2vw, 2.25rem);
   pointer-events: none;
 }
 
 .tabs {
   display: flex;
+  gap: 5px;
 }
 
-/* Tabs are taller than they look: the extra sits above the viewport so they can drop on hover. */
+/* Paint sample cards. The cut corners and hole are real, so whatever is behind shows through:
+   the card itself is the pale edge and eyelet, and ::before is the colour laid on top of it. */
 .tab {
+  --cut: 15px;
+  --hole: 4.5px;
+  --hole-from-tip: 17px;
+  --edge: var(--color-aulait);
+  --edge-width: 3px;
+  --eyelet: 2.5px;
+  --tip: var(--tab);
   position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  height: 92px;
+  /* Taller than it looks: the extra sits above the viewport so the card can drop on hover. */
+  width: clamp(86px, 7.6vw, 116px);
+  height: 124px;
   margin-top: -32px;
-  padding: 0 clamp(0.75rem, 1.35vw, 1.5rem) 1.15rem;
+  padding: 0 0 2.25rem;
   border: 0;
-  border-radius: 0 0 50% 50% / 0 0 22px 22px;
-  background: var(--tab);
+  background: var(--edge);
   color: var(--tab-ink);
-  box-shadow: 0 3px 0 var(--color-aulait);
   font: inherit;
   font-size: clamp(0.9375rem, 0.82rem + 0.28vw, 1.125rem);
   line-height: 1;
   cursor: pointer;
   pointer-events: auto;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+  mask: radial-gradient(circle at 50% calc(100% - var(--hole-from-tip)), transparent calc(var(--hole) - 0.5px), var(--color-hague) var(--hole));
   transition: transform 320ms var(--ease-settle);
+}
+
+.tab::before {
+  --inner-cut: calc(var(--cut) - var(--edge-width) * 0.41);
+  --inner-hole: calc(var(--hole) + var(--eyelet));
+  content: "";
+  position: absolute;
+  inset: 0 var(--edge-width) var(--edge-width);
+  z-index: -1;
+  background: var(--tab);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--inner-cut)), calc(100% - var(--inner-cut)) 100%, var(--inner-cut) 100%, 0 calc(100% - var(--inner-cut)));
+  mask: radial-gradient(circle at 50% calc(100% - var(--hole-from-tip) + var(--edge-width)), transparent calc(var(--inner-hole) - 0.5px), var(--color-hague) var(--inner-hole));
 }
 
 @media (hover: hover) {
@@ -43,21 +66,41 @@
 
 .tab:focus-visible {
   transform: translateY(9px);
+  outline-offset: -8px;
 }
 
 .tab[aria-current="page"] {
   transform: translateY(14px);
 }
 
-.tab:focus-visible {
-  outline-offset: -6px;
+/* The logo's card lies on its side, sliding in from the left edge with its hole to the right. */
+.home {
+  --edge: var(--color-romesco);
+  --hole-from-tip: 18px;
+  width: clamp(208px, 17vw, 244px);
+  height: 62px;
+  margin-top: 14px;
+  margin-left: -32px;
+  padding: 0 40px 0 50px;
+  align-items: center;
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
+  mask: radial-gradient(circle at calc(100% - var(--hole-from-tip)) 50%, transparent calc(var(--hole) - 0.5px), var(--color-hague) var(--hole));
 }
 
-.home {
-  width: clamp(204px, 17vw, 250px);
-  padding-inline: 1.15rem;
-  padding-bottom: 1.25rem;
-  box-shadow: 0 3px 0 var(--color-romesco);
+.home::before {
+  inset: var(--edge-width) var(--edge-width) var(--edge-width) 0;
+  clip-path: polygon(0 0, calc(100% - var(--inner-cut)) 0, 100% var(--inner-cut), 100% calc(100% - var(--inner-cut)), calc(100% - var(--inner-cut)) 100%, 0 100%);
+  mask: radial-gradient(circle at calc(100% - var(--hole-from-tip) + var(--edge-width)) 50%, transparent calc(var(--inner-hole) - 0.5px), var(--color-hague) var(--inner-hole));
+}
+
+@media (hover: hover) {
+  .home:hover {
+    transform: translateX(9px);
+  }
+}
+
+.home:focus-visible {
+  transform: translateX(9px);
 }
 
 .logo {
@@ -68,9 +111,9 @@
 
 .menuButton {
   display: none;
-  width: 76px;
-  padding-inline: 0;
-  padding-bottom: 1.05rem;
+  width: 72px;
+  height: 118px;
+  padding-bottom: 2.15rem;
 }
 
 /* Three heavy bars that fold into a cross. */
@@ -130,6 +173,11 @@
     display: flex;
   }
 
+  .home {
+    height: 54px;
+    margin-top: 8px;
+  }
+
   .menu {
     position: fixed;
     inset: 0;
@@ -149,10 +197,11 @@
     flex: 1;
     display: flex;
     align-items: flex-end;
-    margin-bottom: -22px;
-    padding: 0 1rem 1.9rem;
-    border-radius: 0 0 50% 50% / 0 0 26px 26px;
+    margin-bottom: -36px;
+    padding: 0 1rem 2.1rem;
     background: var(--tab);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 26px), calc(100% - 26px) 100%, 26px 100%, 0 calc(100% - 26px));
+    mask: radial-gradient(circle at calc(100% - 44px) calc(100% - 18px), transparent 8.5px, var(--color-hague) 9px);
     color: var(--tab-ink);
     font-size: clamp(2.5rem, 13vw, 4.5rem);
     font-weight: 900;
@@ -161,6 +210,10 @@
     transform: translateY(-110vh);
     transition: transform 520ms var(--ease-settle);
     transition-delay: calc(var(--index) * 34ms);
+  }
+
+  .menuLink:last-child {
+    margin-bottom: 0;
   }
 
   .menu[data-open="true"] .menuLink {

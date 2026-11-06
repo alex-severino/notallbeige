@@ -406,6 +406,47 @@ export function Checks({
   );
 }
 
+/** Encaustic floor of pinwheels: each tile is four half-square triangles turning around its centre. */
+export function PinwheelTiles({
+  x,
+  y,
+  width,
+  height,
+  size,
+  a,
+  b,
+}: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  size: number;
+  a: string;
+  b: string;
+}) {
+  const cell = size / 2;
+  const turns = [
+    [[0, 0], [1, 0], [1, 1]],
+    [[1, 0], [1, 1], [0, 1]],
+    [[0, 1], [0, 0], [1, 0]],
+    [[1, 1], [0, 1], [0, 0]],
+  ];
+  let d = "";
+  for (let row = 0; row * cell < height; row++) {
+    for (let column = 0; column * cell < width; column++) {
+      const [p, q, r] = turns[(row % 2) * 2 + (column % 2)];
+      const point = ([px, py]: number[]) => `${x + (column + px) * cell} ${y + (row + py) * cell}`;
+      d += `M${point(p)}L${point(q)}L${point(r)}Z`;
+    }
+  }
+  return (
+    <g>
+      <rect x={x} y={y} width={width} height={height} fill={a} />
+      <path d={d} fill={b} />
+    </g>
+  );
+}
+
 /** A painted scalloped frieze running around the top of a room. */
 export function Frieze({ width, depth, fill, count }: { width: number; depth: number; fill: string; count: number }) {
   return <path d={scallops(0, width, depth, count, depth * 0.55, depth)} fill={fill} />;
