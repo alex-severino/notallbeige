@@ -17,6 +17,18 @@ npm run build
 npm run lint
 ```
 
+## Releases
+
+Production is `main`, served at `www.notallbeige.com`, with `notallbeige.com` redirecting to it.
+
+```sh
+npm run ship          # push main, deploy that exact commit, verify it is live
+npm run deploy:check  # read-only status
+npm run test:deploy   # test the release safeguards
+```
+
+Plain Git pushes also deploy automatically, more slowly. See `AGENTS.md` for the release rules.
+
 ## Where things live
 
 - `content/site.ts`: all copy, services, rooms, podcasts and the hero colour schemes. Start here to change words or add photographs.
