@@ -10,11 +10,11 @@ import { home, paint, rooms } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Portfolio",
-  description: "Colour stories from the Not All Beige sketchbook.",
+  description: "Room by room, the colour schemes of Not All Beige.",
   alternates: { canonical: "/portfolio" },
 };
 
-/** Magazine layout: wide, arch, arch, wide, then two halves. */
+/** Magazine layout: wide, arch, arch, wide, two halves, then one across the page. */
 const layout = [
   { span: 4, ratio: "4 / 3", arch: false },
   { span: 2, ratio: "2 / 3", arch: true },
@@ -22,6 +22,7 @@ const layout = [
   { span: 4, ratio: "4 / 3", arch: false },
   { span: 3, ratio: "4 / 3", arch: false },
   { span: 3, ratio: "4 / 3", arch: false },
+  { span: 6, ratio: "8 / 5", arch: false },
 ];
 
 export default function PortfolioPage() {

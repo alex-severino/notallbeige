@@ -61,6 +61,10 @@ export function RoomsRail() {
 
   return (
     <section ref={sectionRef} className={styles.section} aria-labelledby="rooms-title">
+      <header className={styles.introTop}>
+        <p className="title display-lg">{home.rooms.title}</p>
+        <p>{home.rooms.lead}</p>
+      </header>
       <div className={styles.stage}>
         <div ref={railRef} className={styles.rail}>
           <header className={styles.intro}>

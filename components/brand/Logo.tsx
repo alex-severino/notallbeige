@@ -4,15 +4,15 @@ type LogoProps = {
   variant?: "line" | "stacked";
   /** Letter colour. */
   ink?: string;
-  /** First paint: the doorway, then every other spot. */
+  /** Paint for the O and the top of the B. */
   paintA?: string;
-  /** Second paint: the o, then every other spot. */
+  /** Paint for the A and the bottom of the B. */
   paintB?: string;
   className?: string;
   title?: string;
 };
 
-/** The nine painted spots of the wordmark, shared by the logo and the hero. */
+/** The letters with their enclosed spaces painted in, shared by the logo and the hero. */
 export function LogoShapes({
   mark,
   ink,
@@ -24,23 +24,13 @@ export function LogoShapes({
   paintA: string;
   paintB: string;
 }) {
-  const paint = (index: number) => (index % 2 === 0 ? paintA : paintB);
   return (
     <>
-      {mark.spots.map((spot, index) =>
-        spot.kind === "dot" ? null : (
-          <path
-            key={spot.d}
-            d={spot.d}
-            style={{ fill: paint(index), stroke: spot.kind === "counter" ? paint(index) : "none" }}
-            strokeWidth={12}
-          />
-        ),
-      )}
+      {mark.spots.map((spot, index) => {
+        const colour = index % 2 === 0 ? paintA : paintB;
+        return <path key={spot} d={spot} style={{ fill: colour, stroke: colour }} strokeWidth={12} />;
+      })}
       <path d={mark.letters} style={{ fill: ink }} />
-      {mark.spots.map((spot, index) =>
-        spot.kind === "dot" ? <path key={spot.d} d={spot.d} style={{ fill: paint(index) }} /> : null,
-      )}
     </>
   );
 }
@@ -48,8 +38,8 @@ export function LogoShapes({
 export function Logo({
   variant = "line",
   ink = "var(--color-romesco)",
-  paintA = "var(--color-india)",
-  paintB = "var(--color-lulworth)",
+  paintA = "var(--color-lulworth)",
+  paintB = "var(--color-india)",
   className,
   title = "not all beige",
 }: LogoProps) {

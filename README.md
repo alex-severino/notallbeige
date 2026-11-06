@@ -32,8 +32,8 @@ Plain Git pushes also deploy automatically, more slowly. See `AGENTS.md` for the
 ## Where things live
 
 - `content/site.ts`: all copy, services, rooms, podcasts and the hero colour schemes. Start here to change words or add photographs.
-- `app/globals.css`: the nine palette tokens. Change them and the whole site follows.
-- `components/rooms/`: the illustration kit and the six room elevations.
+- `app/globals.css`: the ten palette tokens. Change them and the whole site follows.
+- `components/rooms/`: the illustration kit and the seven room drawings.
 - `components/home/Hero.tsx`: the opening gag, repaintable wall and walk through the doorways.
 - `public/brand/`: logo files in SVG and PNG, for dark and light backgrounds.
 

@@ -22,16 +22,153 @@ export function arch(cx: number, bottom: number, halfWidth: number, height: numb
   return `M${cx - halfWidth} ${bottom}V${spring}A${halfWidth} ${halfWidth} 0 0 1 ${cx + halfWidth} ${spring}V${bottom}Z`;
 }
 
-/** A wobbly oval, for mirrors that can't stand still. */
-export function wavy(cx: number, cy: number, rx: number, ry: number, waves: number, amount: number) {
-  let d = "";
-  const steps = 160;
-  for (let i = 0; i < steps; i++) {
-    const t = (i / steps) * Math.PI * 2;
-    const k = 1 + amount * Math.sin(waves * t);
-    d += `${i ? "L" : "M"}${(cx + rx * k * Math.cos(t)).toFixed(1)} ${(cy + ry * k * Math.sin(t)).toFixed(1)}`;
+/** Checks on a floor running to a vanishing point, as one path. Depth 1 is the near edge. */
+export function perspectiveTiles({
+  vanish: [vx, vy],
+  left,
+  right,
+  floor,
+  near,
+  far,
+  columns = 6,
+  rows = 4,
+}: {
+  vanish: [number, number];
+  left: number;
+  right: number;
+  floor: number;
+  near: number;
+  far: number;
+  columns?: number;
+  rows?: number;
+}) {
+  const u = (i: number) => left + (i * (right - left)) / columns;
+  const depth = (j: number) => near + ((far - near) * j) / rows;
+  const sx = (x: number, d: number) => (vx + (x - vx) / d).toFixed(1);
+  const sy = (d: number) => (vy + (floor - vy) / d).toFixed(1);
+  let path = "";
+  for (let j = 0; j < rows; j++) {
+    for (let i = j % 2; i < columns; i += 2) {
+      path += `M${sx(u(i), depth(j))} ${sy(depth(j))}L${sx(u(i + 1), depth(j))} ${sy(depth(j))}L${sx(u(i + 1), depth(j + 1))} ${sy(depth(j + 1))}L${sx(u(i), depth(j + 1))} ${sy(depth(j + 1))}Z`;
+    }
   }
-  return `${d}Z`;
+  return path;
+}
+
+export type EnfiladeRoom = { wall: string; tile?: [string, string] };
+
+/** Doorways nested towards one vanishing point, each room with a checked floor in true perspective. */
+export function Enfilade({
+  rooms,
+  cx,
+  floor,
+  halfWidth,
+  height,
+  vanish,
+  frame,
+  frameFill,
+  depth = 0.64,
+}: {
+  rooms: EnfiladeRoom[];
+  cx: number;
+  floor: number;
+  halfWidth: number;
+  height: number;
+  vanish: [number, number];
+  frame: number;
+  frameFill: string;
+  depth?: number;
+}) {
+  const [vx, vy] = vanish;
+  return (
+    <>
+      {rooms.map((room, k) => {
+        const f = depth ** k;
+        const next = depth ** (k + 1);
+        const doorX = vx + (cx - vx) * f;
+        const bottom = vy + (floor - vy) * f;
+        const left = cx - halfWidth;
+        const right = cx + halfWidth;
+        const edge = (x: number, scale: number) => vx + (x - vx) * scale;
+        const farBottom = vy + (floor - vy) * next;
+        return (
+          <g key={k}>
+            <path d={arch(doorX, bottom, (halfWidth + frame) * f, (height + frame) * f)} fill={frameFill} />
+            <path d={arch(doorX, bottom, halfWidth * f, height * f)} fill={room.wall} />
+            {room.tile ? (
+              <>
+                <path
+                  d={`M${edge(left, f)} ${bottom}L${edge(right, f)} ${bottom}L${edge(right, next)} ${farBottom}L${edge(left, next)} ${farBottom}Z`}
+                  fill={room.tile[0]}
+                />
+                <path
+                  d={perspectiveTiles({ vanish, left, right, floor, near: 1 / f, far: 1 / next })}
+                  fill={room.tile[1]}
+                />
+              </>
+            ) : null}
+          </g>
+        );
+      })}
+    </>
+  );
+}
+
+type StripeColour = "aulait" | "shallot" | "romesco";
+
+/** One roll of Farrow & Ball Stripe BP6103, measured from its product image. */
+const STRIPE_ROLL = 1134;
+const STRIPE_RUN: [StripeColour, number][] = (() => {
+  const run: [StripeColour, number][] = [["aulait", 25], ["shallot", 37], ["romesco", 149], ["aulait", 37]];
+  let used = 248;
+  let colour: StripeColour = "shallot";
+  while (used < STRIPE_ROLL) {
+    const width = Math.min(37.6, STRIPE_ROLL - used);
+    run.push([colour, width]);
+    used += width;
+    colour = colour === "shallot" ? "aulait" : "shallot";
+  }
+  return run;
+})();
+
+/** Stripe wallpaper laid out across a width, with one roll spanning `roll` units. */
+export function stripeBands(width: number, roll: number) {
+  const scale = roll / STRIPE_ROLL;
+  const bands: { x: number; width: number; colour: StripeColour }[] = [];
+  for (let start = 0; start < width; start += roll) {
+    let x = start;
+    for (const [colour, size] of STRIPE_RUN) {
+      const bandWidth = Math.min(size * scale, width - x);
+      if (bandWidth <= 0) break;
+      bands.push({ x, width: bandWidth, colour });
+      x += size * scale;
+    }
+  }
+  return bands;
+}
+
+/**
+ * Farrow & Ball Dot BP5902: staggered columns of spots that swell and shrink in a
+ * diagonal wave. The wave's centre drops from left to right, like the printed paper.
+ */
+export function dotPaper(width: number, height: number, spacing: number) {
+  const columns = Math.ceil(width / spacing) + 1;
+  const rows = Math.ceil(height / (spacing * 0.94)) + 1;
+  const largest = spacing * 0.43;
+  const smallest = spacing * 0.1;
+  let path = "";
+  for (let column = 0; column < columns; column++) {
+    const x = column * spacing;
+    const centre = height * (0.24 + (0.56 * x) / width);
+    for (let row = 0; row < rows; row++) {
+      const y = row * spacing * 0.94 + (column % 2 ? spacing * 0.47 : 0);
+      const distance = (y - centre) / (height * 0.46);
+      const r = smallest + (largest - smallest) * Math.exp(-distance * distance);
+      const size = r.toFixed(1);
+      path += `M${(x - r).toFixed(1)} ${y.toFixed(1)}a${size} ${size} 0 1 0 ${(r * 2).toFixed(1)} 0a${size} ${size} 0 1 0 ${(-r * 2).toFixed(1)} 0`;
+    }
+  }
+  return path;
 }
 
 /** Armchair with a scallop-shell back: wedges fanning out from the seat. */
@@ -201,66 +338,6 @@ export function Frame({
       <rect x={-12} y={-12} width={w + 24} height={h + 24} fill={frame} />
       <rect width={w} height={h} fill={mat} />
       {children}
-    </g>
-  );
-}
-
-/** Deep, generous sofa made of bolsters. */
-export function Sofa({
-  body,
-  back,
-  base,
-  width = 640,
-  ...at
-}: Place & { body: string; back: string; base: string; width?: number }) {
-  const seats = 3;
-  const inner = width - 150;
-  const seatWidth = inner / seats;
-  return (
-    <g transform={place(at)}>
-      <rect x={-width / 2 + 40} y={-26} width={22} height={26} fill={base} />
-      <rect x={width / 2 - 62} y={-26} width={22} height={26} fill={base} />
-      {Array.from({ length: seats }, (_, i) => (
-        <rect key={i} x={-inner / 2 + i * seatWidth + 4} y={-262} width={seatWidth - 8} height={170} rx={62} fill={back} />
-      ))}
-      {Array.from({ length: seats }, (_, i) => (
-        <rect key={i} x={-inner / 2 + i * seatWidth + 2} y={-138} width={seatWidth - 4} height={112} rx={50} fill={body} />
-      ))}
-      <rect x={-width / 2} y={-196} width={78} height={170} rx={39} fill={body} />
-      <rect x={width / 2 - 78} y={-196} width={78} height={170} rx={39} fill={body} />
-    </g>
-  );
-}
-
-/** Full-height curtain with a scalloped pelmet. */
-export function Curtain({
-  x,
-  width,
-  height,
-  a,
-  b,
-  pelmet,
-  fringe,
-  top = 0,
-}: {
-  x: number;
-  width: number;
-  height: number;
-  a: string;
-  b: string;
-  pelmet: string;
-  fringe: string;
-  top?: number;
-}) {
-  const folds = Math.round(width / 34);
-  const fold = width / folds;
-  return (
-    <g transform={`translate(${x} ${top})`}>
-      {Array.from({ length: folds }, (_, i) => (
-        <rect key={i} x={i * fold} y={0} width={fold + 0.5} height={height} fill={i % 2 ? b : a} />
-      ))}
-      <rect x={-10} y={-2} width={width + 20} height={96} fill={pelmet} />
-      <path d={scallops(-10, width + 10, 94, Math.round(width / 46), 24, 2)} fill={fringe} />
     </g>
   );
 }

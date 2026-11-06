@@ -308,8 +308,6 @@
 .episodes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  background: var(--color-aulait);
-  padding-top: 44px;
 }
 
 .episode {
@@ -317,8 +315,7 @@
   display: flex;
   flex-direction: column;
   min-height: clamp(26rem, 74vh, 44rem);
-  padding: clamp(1.5rem, 3vw, 3rem);
-  padding-bottom: clamp(5rem, 11vh, 7rem);
+  padding: clamp(4.5rem, 9vh, 6rem) clamp(1rem, 3vw, 3rem) clamp(5rem, 11vh, 7rem);
 }
 
 .record {
@@ -349,7 +346,7 @@
 }
 
 .episodeListen {
-  display: inline-block;
+  align-self: flex-start;
   margin-top: 1rem;
   border-bottom: 3px solid currentColor;
   line-height: 1.15;
@@ -416,6 +413,29 @@
 
   .steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Closer in on Angelina: the full-width photograph is too wide for a phone. */
+  .portrait {
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 84% 50%;
+  }
+
+  .roomArt {
+    height: min(84svh, 104vw);
+  }
+
+  .episode {
+    min-height: 0;
+  }
+
+  .record {
+    margin-bottom: 2rem;
+  }
+
+  .contactEmail {
+    font-size: 8vw;
   }
 
   .gallery {

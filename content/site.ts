@@ -24,6 +24,7 @@ export type PaintKey =
   | "bancha"
   | "hague"
   | "aulait"
+  | "macadamia"
   | "oldwhite";
 
 export type Paint = {
@@ -36,7 +37,7 @@ export type Paint = {
   note: string;
 };
 
-/** Farrow & Ball names. The hex values live in app/globals.css as close on-screen matches. */
+/** Farrow & Ball names. The hex values live in app/globals.css as on-screen matches. */
 export const paints: Paint[] = [
   { key: "romesco", name: "romesco", code: "CB4", ink: "aulait", note: "Red walls make dinner last longer." },
   { key: "lulworth", name: "lulworth blue", code: "No. 89", ink: "hague", note: "The sky, brought indoors." },
@@ -46,6 +47,7 @@ export const paints: Paint[] = [
   { key: "bancha", name: "bancha", code: "No. 298", ink: "aulait", note: "Green tea for grown-ups." },
   { key: "hague", name: "hague blue", code: "No. 30", ink: "aulait", note: "Deep enough to lose a weekend in." },
   { key: "aulait", name: "au lait", code: "CB9", ink: "hague", note: "Allowed, if the sofa is loud." },
+  { key: "macadamia", name: "roasted macadamia", code: "CB2", ink: "hague", note: "The only beige we trust." },
   { key: "oldwhite", name: "old white", code: "No. 4", ink: "hague", note: "Are you sure?" },
 ];
 
@@ -75,10 +77,10 @@ export const home = {
   },
   rooms: {
     title: "the rooms.",
-    lead: "Colour stories from the sketchbook, drawn while the photographs are on their way.",
+    lead: "Room by room, drawn while the photographs are on their way.",
   },
   palette: {
-    title: "nine colours. no apologies.",
+    title: "ten colours. no apologies.",
     lead: "The studio palette, by Farrow & Ball. Tap one to see what it’s for.",
   },
   marquee: ["no magnolia", "no greige", "no matching sets", "no safe choices", "no apologies"],
@@ -98,7 +100,6 @@ export type Service = {
   paint: PaintKey;
   ink: PaintKey;
   leaf: PaintKey;
-  beyond: PaintKey;
 };
 
 export const services: Service[] = [
@@ -112,7 +113,6 @@ export const services: Service[] = [
     paint: "calamine",
     ink: "hague",
     leaf: "romesco",
-    beyond: "lulworth",
   },
   {
     id: "one-room",
@@ -124,7 +124,6 @@ export const services: Service[] = [
     paint: "lulworth",
     ink: "hague",
     leaf: "hague",
-    beyond: "shallot",
   },
   {
     id: "just-colour",
@@ -136,7 +135,6 @@ export const services: Service[] = [
     paint: "india",
     ink: "hague",
     leaf: "bancha",
-    beyond: "romesco",
   },
 ];
 
@@ -154,93 +152,95 @@ export type Room = {
   paint: PaintKey;
   ink: PaintKey;
   story: string;
-  scheme: { part: string; paint: PaintKey }[];
+  /** `label` replaces the paint name, for wallpapers. */
+  scheme: { part: string; paint: PaintKey; label?: string }[];
   /** Add photographs here as they arrive. Each entry replaces the illustration on the room's page. */
   photos: { src: string; alt: string }[];
 };
 
 export const rooms: Room[] = [
   {
-    slug: "romesco-dining-room",
-    title: "the romesco dining room",
-    paint: "romesco",
-    ink: "aulait",
-    story: "Red walls make people stay at the table. Add a scalloped cloth, a lamp you could shelter under and a floor that refuses to sit quietly, and nobody is going home before midnight.",
-    scheme: [
-      { part: "walls", paint: "romesco" },
-      { part: "ceiling frieze", paint: "calamine" },
-      { part: "pendant", paint: "india" },
-      { part: "floor", paint: "hague" },
-    ],
-    photos: [],
-  },
-  {
-    slug: "lulworth-blue-bedroom",
-    title: "the lulworth blue bedroom",
-    paint: "lulworth",
-    ink: "hague",
-    story: "Sky-coloured walls, a headboard the colour of good butter and a red stripe to stop it all behaving too well. A room for sleeping late on purpose.",
-    scheme: [
-      { part: "walls", paint: "lulworth" },
-      { part: "headboard", paint: "india" },
-      { part: "throw", paint: "romesco" },
-      { part: "rug", paint: "shallot" },
-    ],
-    photos: [],
-  },
-  {
-    slug: "india-yellow-hall",
-    title: "the india yellow hall",
-    paint: "india",
-    ink: "hague",
-    story: "A hall is the first thing a house says about itself. This one says come in, take your coat off and stay for supper.",
-    scheme: [
-      { part: "walls", paint: "india" },
-      { part: "woodwork", paint: "hague" },
-      { part: "stair runner", paint: "romesco" },
-      { part: "floor", paint: "aulait" },
-    ],
-    photos: [],
-  },
-  {
-    slug: "hague-blue-study",
-    title: "the hague blue study",
+    slug: "entrance",
+    title: "the entrance",
     paint: "hague",
     ink: "aulait",
-    story: "Deep blue walls swallow the clutter and make every book spine look deliberate. One pink chair, one yellow lamp and you will finally read the ones you bought to look clever.",
+    story: "Hague Blue wraps the whole room in shadow, so the Romesco door does all the talking. You can see it from the end of the street.",
     scheme: [
       { part: "walls", paint: "hague" },
-      { part: "chair", paint: "shallot" },
-      { part: "lamp", paint: "india" },
-      { part: "rug", paint: "romesco" },
+      { part: "front door", paint: "romesco" },
     ],
     photos: [],
   },
   {
-    slug: "calamine-drawing-room",
-    title: "the calamine drawing room",
+    slug: "hallway",
+    title: "the hallway",
+    paint: "romesco",
+    ink: "aulait",
+    story: "Romesco on every surface, woodwork and all, with Stripe wallpaper running across the ceiling. Walking to the kitchen should never be boring.",
+    scheme: [
+      { part: "walls and woodwork", paint: "romesco" },
+      { part: "ceiling", paint: "shallot", label: "stripe wallpaper" },
+    ],
+    photos: [],
+  },
+  {
+    slug: "kitchen",
+    title: "the kitchen",
     paint: "calamine",
     ink: "hague",
-    story: "Pink that flatters everyone, a sofa the colour of olives and a mirror that can’t stand still. Grown-up, but not so grown-up you can’t put your feet up.",
+    story: "Calamine from the units to the ceiling: a soft, warm pink that makes toast feel like an occasion.",
+    scheme: [{ part: "walls and units", paint: "calamine" }],
+    photos: [],
+  },
+  {
+    slug: "dining-room",
+    title: "the dining room",
+    paint: "aulait",
+    ink: "hague",
+    story: "Romesco walls held between Au Lait above and below. Red keeps people at the table, and that is the whole idea.",
     scheme: [
-      { part: "walls", paint: "calamine" },
-      { part: "sofa", paint: "bancha" },
-      { part: "mirror and curtain", paint: "romesco" },
-      { part: "rug", paint: "lulworth" },
+      { part: "ceiling", paint: "aulait" },
+      { part: "walls", paint: "romesco" },
+      { part: "woodwork", paint: "aulait" },
     ],
     photos: [],
   },
   {
-    slug: "bancha-kitchen",
-    title: "the bancha kitchen",
+    slug: "bedroom",
+    title: "the bedroom",
     paint: "bancha",
     ink: "aulait",
-    story: "Olive cabinets against shallot pink, with a hood in Romesco and plates you actually want on show. The kind of kitchen that makes toast feel like an occasion.",
+    story: "Deep Bancha green against Dot wallpaper, its Shallot spots swelling and fading across a Romesco ground. A room for sleeping late on purpose.",
     scheme: [
-      { part: "cabinets", paint: "bancha" },
-      { part: "walls", paint: "shallot" },
-      { part: "hood", paint: "romesco" },
-      { part: "floor", paint: "aulait" },
+      { part: "woodwork", paint: "bancha" },
+      { part: "walls", paint: "romesco", label: "dot wallpaper" },
+    ],
+    photos: [],
+  },
+  {
+    slug: "childrens-bedroom",
+    title: "the children’s bedroom",
+    paint: "macadamia",
+    ink: "hague",
+    story: "Roasted Macadamia walls with Romesco and Au Lait, and one band of Stripe wallpaper running against the ceiling like the edge of a circus tent.",
+    scheme: [
+      { part: "walls", paint: "macadamia" },
+      { part: "woodwork", paint: "romesco" },
+      { part: "ceiling", paint: "aulait" },
+      { part: "ceiling band", paint: "shallot", label: "stripe wallpaper" },
+    ],
+    photos: [],
+  },
+  {
+    slug: "bathroom",
+    title: "the bathroom",
+    paint: "oldwhite",
+    ink: "hague",
+    story: "Old White keeps things calm, then Romesco and India Yellow cheerfully ruin that. A bath should always be a little theatrical.",
+    scheme: [
+      { part: "walls", paint: "oldwhite" },
+      { part: "bath", paint: "romesco" },
+      { part: "tiles", paint: "india" },
     ],
     photos: [],
   },
@@ -315,5 +315,6 @@ export const heroSchemes: Record<PaintKey, HeroScheme> = {
   bancha: { ink: "calamine", a: "romesco", b: "india", trim: "calamine", floor: "hague", chairA: "shallot", chairB: "romesco", seat: "india", shade: "india", fringe: "romesco", room: "shallot" },
   hague: { ink: "aulait", a: "romesco", b: "india", trim: "aulait", floor: "bancha", chairA: "shallot", chairB: "romesco", seat: "india", shade: "india", fringe: "romesco", room: "romesco" },
   aulait: { ink: "romesco", a: "india", b: "lulworth", trim: "oldwhite", floor: "hague", chairA: "romesco", chairB: "shallot", seat: "india", shade: "hague", fringe: "romesco", room: "romesco" },
+  macadamia: { ink: "hague", a: "romesco", b: "india", trim: "aulait", floor: "hague", chairA: "romesco", chairB: "shallot", seat: "india", shade: "romesco", fringe: "hague", room: "romesco" },
   oldwhite: { ink: "hague", a: "romesco", b: "india", trim: "aulait", floor: "hague", chairA: "aulait", chairB: "oldwhite", seat: "aulait", shade: "aulait", fringe: "hague", room: "romesco" },
 };

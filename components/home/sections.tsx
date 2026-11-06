@@ -3,15 +3,16 @@ import type { CSSProperties } from "react";
 import { CheckBand, Scallop } from "@/components/decor";
 import { PaintLink } from "@/components/PaintLink";
 import { Reveal } from "@/components/Reveal";
-import { arch } from "@/components/rooms/parts";
+import { arch, Enfilade, type EnfiladeRoom } from "@/components/rooms/parts";
 import { home, paint, services, site, type PaintKey } from "@/content/site";
 import styles from "./sections.module.css";
 
-const ROSETTE_TEXT = "not all beige · come in · sit down · stay a while · ";
+const ROSETTE_TEXT = "NOT ALL BEIGE · COME ON IN · ";
+const RING = 72;
 
 function Rosette() {
   const petals = 16;
-  const radius = 88;
+  const radius = 90;
   let edge = "";
   for (let i = 0; i < petals; i++) {
     const a0 = (i / petals) * Math.PI * 2;
@@ -24,18 +25,21 @@ function Rosette() {
   }
   return (
     <div className={styles.rosette} aria-hidden="true">
-      <svg viewBox="0 0 200 200" className={styles.rosetteSpin}>
-        <path d={`${edge}Z`} fill={paint("india")} />
+      {/* The box is wider than 200 so the lobes aren't clipped flat as it turns. */}
+      <svg viewBox="-10 -10 220 220" className={styles.rosetteSpin}>
+        <path d={`${edge}Z`} fill={paint("hague")} />
         <defs>
-          <path id="rosette-ring" d="M100 100m-69 0a69 69 0 1 1 138 0a69 69 0 1 1 -138 0" />
+          <path id="rosette-ring" d={`M100 100m${-RING} 0a${RING} ${RING} 0 1 1 ${RING * 2} 0a${RING} ${RING} 0 1 1 ${-RING * 2} 0`} />
         </defs>
-        <text fontSize="16.4" fontWeight="900" fill={paint("hague")} letterSpacing="0.2">
-          <textPath href="#rosette-ring">{ROSETTE_TEXT}</textPath>
+        <text fontSize="21" fontWeight="900" fill={paint("aulait")}>
+          <textPath href="#rosette-ring" textLength={(2 * Math.PI * RING - 2).toFixed(1)} lengthAdjust="spacing">
+            {ROSETTE_TEXT}
+          </textPath>
         </text>
       </svg>
-      <svg viewBox="0 0 200 200" className={styles.rosetteCore}>
-        <path d={arch(100, 136, 25, 72)} fill={paint("romesco")} />
-        <path d={arch(100, 136, 13, 44)} fill={paint("lulworth")} />
+      <svg viewBox="-10 -10 220 220" className={styles.rosetteCore}>
+        <path d={arch(100, 134, 27, 76)} fill={paint("romesco")} />
+        <path d={arch(100, 134, 14, 46)} fill={paint("india")} />
       </svg>
     </div>
   );
@@ -63,22 +67,49 @@ export function Intro() {
   );
 }
 
-function Beyond({ color, floor }: { color: PaintKey; floor: PaintKey }) {
+const tile = (a: PaintKey, b: PaintKey): [string, string] => [paint(a), paint(b)];
+
+/** What you can see through each door. */
+const suites: EnfiladeRoom[][] = [
+  [
+    { wall: paint("lulworth"), tile: tile("aulait", "hague") },
+    { wall: paint("hague"), tile: tile("aulait", "romesco") },
+    { wall: paint("india"), tile: tile("aulait", "romesco") },
+    { wall: paint("calamine") },
+  ],
+  [
+    { wall: paint("shallot"), tile: tile("aulait", "romesco") },
+    { wall: paint("romesco"), tile: tile("aulait", "hague") },
+    { wall: paint("lulworth"), tile: tile("aulait", "hague") },
+    { wall: paint("india") },
+  ],
+  [
+    { wall: paint("romesco"), tile: tile("aulait", "hague") },
+    { wall: paint("india"), tile: tile("aulait", "bancha") },
+    { wall: paint("shallot"), tile: tile("aulait", "romesco") },
+    { wall: paint("lulworth") },
+  ],
+];
+
+function Beyond({ rooms }: { rooms: EnfiladeRoom[] }) {
   return (
     <svg viewBox="0 0 300 480" preserveAspectRatio="xMidYMax slice" aria-hidden="true" className={styles.beyond}>
-      <rect width={300} height={480} fill={paint(color)} />
-      <path d={arch(150, 392, 74, 250)} fill={paint("aulait")} />
-      <path d={arch(150, 392, 62, 238)} fill={paint(floor)} />
-      <path d={arch(150, 392, 32, 150)} fill={paint("aulait")} />
-      <path d={arch(150, 392, 24, 142)} fill={paint(color)} />
-      <path d="M0 480L62 392H238L300 480Z" fill={paint("aulait")} />
-      <path d="M38 480 75 392H113L95 480ZM205 480 187 392H225L262 480Z" fill={paint(floor)} />
+      <Enfilade
+        rooms={rooms}
+        cx={150}
+        floor={480}
+        halfWidth={150}
+        height={480}
+        vanish={[150, 300]}
+        frame={14}
+        frameFill={paint("aulait")}
+        depth={0.62}
+      />
     </svg>
   );
 }
 
 export function Doors() {
-  const beyondFloors: PaintKey[] = ["hague", "romesco", "india"];
   return (
     <section className={styles.doorsSection}>
       <div className="gutter">
@@ -96,7 +127,7 @@ export function Doors() {
               <Link href={`/services#${service.id}`} className={styles.doorLink}>
                 <div className={styles.frame}>
                   <div className={styles.opening}>
-                    <Beyond color={service.beyond} floor={beyondFloors[index]} />
+                    <Beyond rooms={suites[index]} />
                     <div
                       className={styles.leaf}
                       style={{ "--leaf": paint(service.leaf), "--leaf-ink": paint(service.leaf === "romesco" || service.leaf === "hague" || service.leaf === "bancha" ? "aulait" : "hague") } as CSSProperties}

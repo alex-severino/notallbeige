@@ -54,7 +54,7 @@ export default async function RoomPage({ params }: PageProps<"/portfolio/[slug]"
                   return (
                     <li key={item.part} className={styles.schemeRow} style={{ background: paint(colour.key), color: paint(colour.ink) }}>
                       <span>{item.part}</span>
-                      <span>{colour.name}</span>
+                      <span>{item.label ?? colour.name}</span>
                     </li>
                   );
                 })}

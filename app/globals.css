@@ -1,9 +1,11 @@
 @import "tailwindcss";
 
-/* The palette. Farrow & Ball names, close on-screen values.
-   Angelina's branding replaces these nine tokens and everything follows. */
+/* The palette, by Farrow & Ball name.
+   Romesco is deliberately redder than Farrow & Ball's web swatch (#ba4845),
+   which looks far browner than the paint on the wall.
+   Angelina's branding replaces these ten tokens and everything follows. */
 @theme static {
-  --color-romesco: #ba4845;
+  --color-romesco: #c8241e;
   --color-lulworth: #a1b8ca;
   --color-india: #cb9e59;
   --color-oldwhite: #c7bfab;
@@ -11,6 +13,7 @@
   --color-shallot: #d5a3bb;
   --color-calamine: #e6d1cb;
   --color-bancha: #686a47;
+  --color-macadamia: #c6baaa;
   --color-hague: #3d4e57;
 
   --font-sans: var(--font-mori), Arial, sans-serif;
@@ -42,7 +45,8 @@
     overflow-x: clip;
   }
 
-  /* Titles are always PP Mori Black. -2% is the tightest lowercase takes before letters fuse. */
+  /* Titles are always PP Mori Black. -2% is the tightest lowercase takes before letters fuse.
+     The all-caps logo is outlines, set tighter at -3%. */
   h1,
   h2,
   h3,
@@ -72,9 +76,15 @@
 
 @utility display-xl {
   font-size: clamp(3.75rem, 14.5vw, 15rem);
+  @media (max-width: 640px) {
+    font-size: 17.4vw;
+  }
 }
 @utility display-lg {
   font-size: clamp(3.25rem, 10vw, 10.5rem);
+  @media (max-width: 640px) {
+    font-size: 14.6vw;
+  }
 }
 @utility display-md {
   font-size: clamp(2.5rem, 6.4vw, 6.75rem);
@@ -90,17 +100,19 @@
 }
 
 /* Reveal on scroll. Content stays visible without JavaScript. */
-.js [data-reveal] {
-  opacity: 0;
-  transform: translateY(1.6rem);
-  transition:
-    opacity 700ms var(--ease-settle),
-    transform 900ms var(--ease-settle);
-  transition-delay: var(--reveal-delay, 0ms);
-}
-.js [data-reveal="in"] {
-  opacity: 1;
-  transform: none;
+@media (scripting: enabled) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(1.6rem);
+    transition:
+      opacity 700ms var(--ease-settle),
+      transform 900ms var(--ease-settle);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal="in"] {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Chunky button: on hover a new coat rolls across. */
@@ -177,9 +189,9 @@
     transition-duration: 1ms !important;
     scroll-behavior: auto !important;
   }
-  .js [data-reveal] {
-    opacity: 1;
-    transform: none;
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
   ::view-transition-old(*),
   ::view-transition-new(*),

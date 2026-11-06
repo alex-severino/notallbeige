@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { LogoShapes } from "@/components/brand/Logo";
 import { stackedMark } from "@/components/brand/logo-data";
-import { arch, FloorLamp, Frame, PedestalTable, Pendant, ShellChair, Vase } from "@/components/rooms/parts";
+import { Enfilade, FloorLamp, Frame, PedestalTable, Pendant, ShellChair, Vase, type EnfiladeRoom } from "@/components/rooms/parts";
 import { findPaint, heroSchemes, paint, paints, type PaintKey } from "@/content/site";
 import styles from "./Hero.module.css";
 
@@ -13,7 +13,7 @@ const ZOOM = 170;
 const ROLL_MS = 1000;
 
 /** Rooms seen through the door, nearest first. The last one is the next section's colour. */
-const ENFILADE: { wall: string; tile?: [string, string] }[] = [
+const ENFILADE: EnfiladeRoom[] = [
   { wall: "var(--room)", tile: [paint("aulait"), paint("hague")] },
   { wall: paint("hague"), tile: [paint("shallot"), paint("romesco")] },
   { wall: paint("india"), tile: [paint("aulait"), paint("romesco")] },
@@ -38,10 +38,10 @@ const LANDSCAPE: Layout = {
   width: 1600,
   height: 1000,
   floor: 880,
-  logo: { x: 84, y: 102, size: 298 },
-  door: { cx: 1186, halfWidth: 186, height: 662 },
-  vanish: [1186, 612],
-  chair: { x: 928, s: 0.68 },
+  logo: { x: 72, y: 150, size: 276 },
+  door: { cx: 1204, halfWidth: 186, height: 662 },
+  vanish: [1204, 612],
+  chair: { x: 960, s: 0.66 },
   mat: { width: 300, size: 30 },
   wide: true,
 };
@@ -50,10 +50,10 @@ const PORTRAIT: Layout = {
   width: 800,
   height: 1640,
   floor: 1436,
-  logo: { x: 30, y: 170, size: 288 },
-  door: { cx: 560, halfWidth: 158, height: 470 },
-  vanish: [560, 1212],
-  chair: { x: 214, s: 0.6 },
+  logo: { x: 32, y: 176, size: 256 },
+  door: { cx: 556, halfWidth: 176, height: 590 },
+  vanish: [556, 1160],
+  chair: { x: 196, s: 0.6 },
   mat: { width: 260, size: 30 },
   wide: false,
 };
@@ -64,70 +64,18 @@ const logoTransform = ({ logo }: Layout) => {
   return `translate(${logo.x - minX * scale} ${logo.y - minY * scale}) scale(${scale})`;
 };
 
-/** Doors nested towards one vanishing point, with a checked floor in true perspective. */
-function Doorways({ layout }: { layout: Layout }) {
-  const { door, floor, vanish } = layout;
-  const [vx, vy] = vanish;
-  const frame = 24;
-  return (
-    <>
-      {ENFILADE.map((room, k) => {
-        const f = DEPTH ** k;
-        const cx = vx + (door.cx - vx) * f;
-        const bottom = vy + (floor - vy) * f;
-        const next = DEPTH ** (k + 1);
-        const nearLeft = vx + (door.cx - door.halfWidth - vx) * f;
-        const nearRight = vx + (door.cx + door.halfWidth - vx) * f;
-        const farLeft = vx + (door.cx - door.halfWidth - vx) * next;
-        const farRight = vx + (door.cx + door.halfWidth - vx) * next;
-        const farBottom = vy + (floor - vy) * next;
-
-        let tiles = "";
-        if (room.tile) {
-          const columns = 6;
-          const rows = 4;
-          const near = 1 / f;
-          const far = 1 / next;
-          const u = (i: number) => door.cx - door.halfWidth + (i * door.halfWidth * 2) / columns;
-          const d = (j: number) => near + ((far - near) * j) / rows;
-          const sx = (x: number, depth: number) => (vx + (x - vx) / depth).toFixed(1);
-          const sy = (depth: number) => (vy + (floor - vy) / depth).toFixed(1);
-          for (let j = 0; j < rows; j++) {
-            for (let i = j % 2; i < columns; i += 2) {
-              tiles += `M${sx(u(i), d(j))} ${sy(d(j))}L${sx(u(i + 1), d(j))} ${sy(d(j))}L${sx(u(i + 1), d(j + 1))} ${sy(d(j + 1))}L${sx(u(i), d(j + 1))} ${sy(d(j + 1))}Z`;
-            }
-          }
-        }
-
-        return (
-          <g key={k}>
-            <path d={arch(cx, bottom, (door.halfWidth + frame) * f, (door.height + frame) * f)} fill="var(--trim)" />
-            <path d={arch(cx, bottom, door.halfWidth * f, door.height * f)} fill={room.wall} />
-            {room.tile ? (
-              <>
-                <path d={`M${nearLeft} ${bottom}L${nearRight} ${bottom}L${farRight} ${farBottom}L${farLeft} ${farBottom}Z`} fill={room.tile[0]} />
-                <path d={tiles} fill={room.tile[1]} />
-              </>
-            ) : null}
-          </g>
-        );
-      })}
-    </>
-  );
-}
-
 function Furnishings({ layout }: { layout: Layout }) {
   const { floor, chair, wide } = layout;
   return (
     <>
       {wide ? (
         <>
-          <Frame x={1438} y={214} w={128} h={176} frame="var(--trim)" mat="var(--pa)">
-            <circle cx={64} cy={70} r={40} fill="var(--pb)" />
-            <rect y={122} width={128} height={54} fill="var(--floor)" />
+          <Frame x={1450} y={214} w={120} h={166} frame="var(--trim)" mat="var(--pa)">
+            <circle cx={60} cy={66} r={38} fill="var(--pb)" />
+            <rect y={116} width={120} height={50} fill="var(--floor)" />
           </Frame>
-          <PedestalTable x={1500} y={floor + 4} width={170} height={252} top="var(--trim)" leg="var(--floor)" />
-          <Vase x={1500} y={floor - 248} s={0.62} body="var(--seat)" stem="var(--ink)" bloomA="var(--pb)" bloomB="var(--chair-a)" />
+          <PedestalTable x={1510} y={floor + 4} width={166} height={252} top="var(--trim)" leg="var(--floor)" />
+          <Vase x={1510} y={floor - 248} s={0.6} body="var(--seat)" stem="var(--ink)" bloomA="var(--pb)" bloomB="var(--chair-a)" />
           <Pendant x={chair.x} y={276} width={224} shade="var(--shade)" fringe="var(--fringe)" cord="var(--trim)" />
         </>
       ) : null}
@@ -157,7 +105,17 @@ function Scene({
         <g transform={logoTransform(layout)}>
           <LogoShapes mark={stackedMark} ink="var(--ink)" paintA="var(--pa)" paintB="var(--pb)" />
         </g>
-        <Doorways layout={layout} />
+        <Enfilade
+          rooms={ENFILADE}
+          cx={door.cx}
+          floor={floor}
+          halfWidth={door.halfWidth}
+          height={door.height}
+          vanish={layout.vanish}
+          frame={24}
+          frameFill="var(--trim)"
+          depth={DEPTH}
+        />
         {layout.wide ? (
           <>
             <rect x={door.cx - mat.width / 2} y={floor + 14} width={mat.width} height={58} rx={6} fill="var(--pa)" />

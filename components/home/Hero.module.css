@@ -3,10 +3,12 @@
   height: 340svh;
 }
 
+/* dvh, so no gap opens under the room when a phone's address bar slides away. */
 .stage {
   position: sticky;
   top: 0;
-  height: 100svh;
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -155,7 +157,12 @@
   height: 100%;
 }
 
-.tin:hover,
+@media (hover: hover) {
+  .tin:hover {
+    transform: translateY(-6px) rotate(-5deg);
+  }
+}
+
 .tin:focus-visible {
   transform: translateY(-6px) rotate(-5deg);
 }
@@ -169,7 +176,7 @@
 }
 
 .note {
-  max-width: 19em;
+  max-width: min(19em, 22vw);
   margin: 0;
   color: var(--color-aulait);
   font-size: clamp(0.9375rem, 0.82rem + 0.3vw, 1.125rem);
@@ -197,12 +204,18 @@
 }
 
 @media (max-aspect-ratio: 1/1) {
+  .hero {
+    height: 290svh;
+  }
   .controls {
     right: 1rem;
     left: 1rem;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.45rem;
+  }
+  .note {
+    max-width: none;
   }
   .tins {
     width: 100%;

@@ -1,7 +1,7 @@
 .intro {
   position: relative;
   overflow-x: clip;
-  padding-block: clamp(3rem, 8vh, 6rem) clamp(5rem, 13vh, 9rem);
+  padding-block: clamp(5rem, 12vh, 7.5rem) clamp(5rem, 13vh, 9rem);
   background: var(--color-calamine);
   color: var(--color-hague);
 }
@@ -25,11 +25,12 @@
   line-height: 1.16;
 }
 
+/* Sits below the awning, so the tabs never cover it. */
 .rosette {
   position: absolute;
-  top: clamp(1rem, 6vh, 4rem);
-  right: clamp(1rem, 6vw, 7rem);
-  width: clamp(8rem, 19vw, 18rem);
+  top: clamp(6rem, 13vh, 8rem);
+  right: clamp(1rem, 5vw, 6rem);
+  width: clamp(12rem, 21vw, 21rem);
   aspect-ratio: 1;
 }
 
@@ -120,10 +121,16 @@
   transition-delay: calc(var(--reveal-delay, 0ms) + 260ms);
 }
 
-.doorLink:hover .leaf,
 .doorLink:focus-visible .leaf {
   transform: rotateY(76deg);
   transition-delay: 0ms;
+}
+
+@media (hover: hover) {
+  .doorLink:hover .leaf {
+    transform: rotateY(76deg);
+    transition-delay: 0ms;
+  }
 }
 
 @media (hover: none) {
@@ -279,7 +286,37 @@
     position: relative;
     top: auto;
     right: auto;
-    margin: 2rem 0 0 auto;
+    width: min(56vw, 15rem);
+    margin: 1.5rem 0 0 auto;
+  }
+
+  .introCopy {
+    margin-top: 1.75rem;
+  }
+
+  .doorsSection {
+    padding-top: 5.5rem;
+  }
+
+  .sectionHead {
+    margin-bottom: 2rem;
+  }
+
+  .marqueeItem {
+    font-size: 15vw;
+  }
+
+  .email {
+    font-size: 8vw;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .buttons a {
+    justify-content: center;
   }
 }
 

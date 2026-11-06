@@ -57,11 +57,16 @@ export function Awning() {
           type="button"
           className={`${styles.tab} ${styles.menuButton}`}
           style={tabStyle(paint("hague"), paint("aulait"))}
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="site-menu"
           onClick={() => setOpen((value) => !value)}
         >
-          {open ? "close" : "menu"}
+          <span className={styles.burger} data-open={open} aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
         </button>
       </header>
 
