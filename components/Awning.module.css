@@ -22,7 +22,6 @@
   --hole-from-tip: 17px;
   --edge: var(--color-aulait);
   --edge-width: 3px;
-  --eyelet: 2.5px;
   --tip: var(--tab);
   position: relative;
   display: flex;
@@ -47,8 +46,9 @@
 }
 
 .tab::before {
-  --inner-cut: calc(var(--cut) - var(--edge-width) * 0.41);
-  --inner-hole: calc(var(--hole) + var(--eyelet));
+  /* 2 - sqrt(2): keeps the 45-degree edge as thick as the straight ones. */
+  --inner-cut: calc(var(--cut) - var(--edge-width) * 0.586);
+  --inner-hole: calc(var(--hole) + var(--edge-width));
   content: "";
   position: absolute;
   inset: 0 var(--edge-width) var(--edge-width);
@@ -73,22 +73,22 @@
   transform: translateY(14px);
 }
 
-/* The logo's card lies on its side, sliding in from the left edge with its hole to the right. */
+/* The logo's card lies on its side with its hole to the right, outlined all the way round. */
 .home {
   --edge: var(--color-romesco);
   --hole-from-tip: 18px;
-  width: clamp(208px, 17vw, 244px);
+  width: clamp(176px, calc(17vw - 32px), 212px);
   height: 62px;
   margin-top: 14px;
-  margin-left: -32px;
-  padding: 0 40px 0 50px;
+  margin-left: 14px;
+  padding: 0 40px 0 18px;
   align-items: center;
   clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%);
   mask: radial-gradient(circle at calc(100% - var(--hole-from-tip)) 50%, transparent calc(var(--hole) - 0.5px), var(--color-hague) var(--hole));
 }
 
 .home::before {
-  inset: var(--edge-width) var(--edge-width) var(--edge-width) 0;
+  inset: var(--edge-width);
   clip-path: polygon(0 0, calc(100% - var(--inner-cut)) 0, 100% var(--inner-cut), 100% calc(100% - var(--inner-cut)), calc(100% - var(--inner-cut)) 100%, 0 100%);
   mask: radial-gradient(circle at calc(100% - var(--hole-from-tip) + var(--edge-width)) 50%, transparent calc(var(--inner-hole) - 0.5px), var(--color-hague) var(--inner-hole));
 }
@@ -176,6 +176,7 @@
   .home {
     height: 54px;
     margin-top: 8px;
+    margin-left: 8px;
   }
 
   .menu {

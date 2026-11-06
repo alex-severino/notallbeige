@@ -33,8 +33,8 @@ export function Footer() {
           </a>
         </div>
       </div>
-      <Logo className="mt-14 hidden h-auto w-full sm:block" ink={paint("aulait")} paintA={paint("india")} paintB={paint("lulworth")} />
-      <Logo variant="stacked" className="mt-12 block h-auto w-full sm:hidden" ink={paint("aulait")} paintA={paint("india")} paintB={paint("lulworth")} />
+      <Logo className="mt-14 hidden h-auto w-full sm:block" ink={paint("aulait")} />
+      <Logo variant="stacked" className="mt-12 block h-auto w-full sm:hidden" ink={paint("aulait")} />
       <div className="mt-6 flex flex-wrap justify-between gap-x-8 gap-y-1 text-[0.9375rem]">
         <p>© {site.legalName} 2026</p>
         <p>Colours named after Farrow &amp; Ball paints, matched on screen as closely as we can.</p>
