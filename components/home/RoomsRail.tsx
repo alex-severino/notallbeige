@@ -87,7 +87,7 @@ export function RoomsRail() {
             </article>
           ))}
           <div className={styles.end}>
-            <p className="display-sm">see every room.</p>
+            <p className="title display-sm">see every room.</p>
             <PaintLink href="/portfolio" color="shallot" ink="hague">
               the portfolio
             </PaintLink>

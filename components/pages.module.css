@@ -112,7 +112,7 @@
   aspect-ratio: var(--ratio);
 }
 
-.tile[data-arch="true"] .tileArt {
+.tileLink[data-arch="true"] .tileArt {
   border-radius: 999px 999px 0 0;
 }
 
@@ -148,7 +148,7 @@
 
 /* A room */
 .roomArt {
-  height: min(92svh, 75vw);
+  height: min(100svh, 75vw);
 }
 
 .roomArt svg {
@@ -182,6 +182,7 @@
   align-items: center;
   gap: 0.8rem;
   padding: 0.5rem 0.9rem 0.6rem;
+  border: 3px solid currentColor;
   line-height: 1.1;
 }
 
@@ -289,6 +290,12 @@
   gap: 2rem;
   padding-block: clamp(5rem, 13vh, 8rem) clamp(7rem, 16vh, 11rem);
   background: var(--color-aulait);
+}
+
+.posters {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .posteressCopy {
@@ -423,7 +430,7 @@
     aspect-ratio: 4 / 3;
   }
 
-  .tile[data-arch="true"] .tileArt {
+  .tileLink[data-arch="true"] .tileArt {
     aspect-ratio: 4 / 5;
   }
 }

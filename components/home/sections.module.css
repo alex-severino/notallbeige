@@ -1,5 +1,6 @@
 .intro {
   position: relative;
+  overflow-x: clip;
   padding-block: clamp(3rem, 8vh, 6rem) clamp(5rem, 13vh, 9rem);
   background: var(--color-calamine);
   color: var(--color-hague);

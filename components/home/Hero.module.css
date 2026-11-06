@@ -213,6 +213,12 @@
   }
 }
 
+@media (max-aspect-ratio: 1/1) and (max-height: 720px) {
+  .noteName {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero {
     height: 100svh;

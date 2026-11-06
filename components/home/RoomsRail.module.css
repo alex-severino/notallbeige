@@ -11,6 +11,7 @@
   padding-block: clamp(5rem, 12vh, 7rem) clamp(3.5rem, 8vh, 5rem);
   overflow-x: auto;
   scroll-snap-type: x proximity;
+  scroll-padding-inline: clamp(1rem, 3.2vw, 3.5rem);
   scrollbar-width: none;
 }
 
@@ -23,6 +24,7 @@
   top: 0;
   height: 100svh;
   overflow: hidden;
+  scroll-snap-type: none;
 }
 
 .rail {

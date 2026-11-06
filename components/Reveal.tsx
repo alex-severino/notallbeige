@@ -1,17 +1,19 @@
 "use client";
 
-import { useEffect, useRef, type ElementType, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ElementType, type ReactNode } from "react";
 
 /** Fades content in once it scrolls into view. */
 export function Reveal({
   as: Tag = "div",
   delay = 0,
   className,
+  style,
   children,
 }: {
   as?: ElementType;
   delay?: number;
   className?: string;
+  style?: CSSProperties;
   children: ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
@@ -33,7 +35,7 @@ export function Reveal({
   }, []);
 
   return (
-    <Tag ref={ref} data-reveal="" className={className} style={delay ? { "--reveal-delay": `${delay}ms` } : undefined}>
+    <Tag ref={ref} data-reveal="" className={className} style={{ ...style, ...(delay ? { "--reveal-delay": `${delay}ms` } : null) }}>
       {children}
     </Tag>
   );

@@ -197,7 +197,7 @@ function schemeVars(key: PaintKey): CSSProperties {
   const scheme = heroSchemes[key];
   return {
     "--ink": paint(scheme.ink),
-    "--ink-mat": paint(key === "aulait" || key === "oldwhite" ? "aulait" : "hague"),
+    "--ink-mat": paint(scheme.a === "romesco" ? "aulait" : "hague"),
     "--pa": paint(scheme.a),
     "--pb": paint(scheme.b),
     "--trim": paint(scheme.trim),
@@ -218,7 +218,7 @@ export function Hero() {
   const [wall, setWall] = useState<PaintKey>("romesco");
   const [scheme, setScheme] = useState<PaintKey>("romesco");
   const [coat, setCoat] = useState<{ to: PaintKey; id: number } | null>(null);
-  const [intro] = useState(() => !introPlayed);
+  const [intro, setIntro] = useState(() => !introPlayed);
   const [note, setNote] = useState<PaintKey>("romesco");
 
   const sectionRef = useRef<HTMLElement>(null);
@@ -297,12 +297,12 @@ export function Hero() {
         className={styles.stage}
         style={{ ...schemeVars(scheme), background: paint(wall), "--progress": 0 } as CSSProperties}
       >
-        {coat ? <div key={coat.id} className={styles.coat} style={{ background: paint(coat.to) }} /> : null}
+        {coat ? <div key={`coat-${coat.id}`} className={styles.coat} style={{ background: paint(coat.to) }} /> : null}
 
         <Scene layout={LANDSCAPE} className={styles.wide} worldRef={wideWorld} />
         <Scene layout={PORTRAIT} className={styles.tall} worldRef={tallWorld} />
 
-        {coat ? <Roller key={coat.id} color={paint(coat.to)} /> : null}
+        {coat ? <Roller key={`roller-${coat.id}`} color={paint(coat.to)} /> : null}
 
         <div className={styles.controls}>
           <p className={styles.note} aria-live="polite">
@@ -336,7 +336,9 @@ export function Hero() {
         </p>
 
         {intro ? (
-          <div className={styles.curtain} aria-hidden="true">
+          // Removed once finished: Next keeps this page alive between visits, and showing it
+          // again would otherwise restart the animation.
+          <div className={styles.curtain} aria-hidden="true" onAnimationEnd={() => setIntro(false)}>
             {[LANDSCAPE, PORTRAIT].map((layout) => (
               <svg
                 key={layout.width}

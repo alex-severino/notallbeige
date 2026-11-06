@@ -7,6 +7,11 @@ import styles from "@/components/pages.module.css";
 import { RoomArt } from "@/components/rooms/rooms";
 import { findPaint, paint, rooms } from "@/content/site";
 
+/** Every room is known at build time, so nothing here should ever render per request. */
+export const ensureStatic = "navigation";
+/** The slug isn't in the shared shell, so opening a room waits for its small static page. */
+export const instant = false;
+
 export function generateStaticParams() {
   return rooms.map((room) => ({ slug: room.slug }));
 }
@@ -33,7 +38,7 @@ export default async function RoomPage({ params }: PageProps<"/portfolio/[slug]"
     <Coat>
       <div>
         <div className={styles.roomArt}>
-          <RoomArt slug={room.slug} title={`Illustration of ${room.title}`} />
+          <RoomArt slug={room.slug} title={`Illustration of ${room.title}`} crop="xMidYMid slice" />
         </div>
         <section className={styles.roomBody} style={{ background: paint(room.paint), color: paint(room.ink) }}>
           <div className="gutter">

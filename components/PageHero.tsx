@@ -8,12 +8,15 @@ export function PageHero({
   ink,
   title,
   lead,
+  hem = true,
   children,
 }: {
   color: PaintKey;
   ink: PaintKey;
   title: ReactNode;
   lead?: ReactNode;
+  /** Set false when the footer's own scalloped edge comes straight after. */
+  hem?: boolean;
   children?: ReactNode;
 }) {
   return (
@@ -23,7 +26,7 @@ export function PageHero({
         {lead ? <p className="mt-[clamp(1.5rem,4vh,3rem)] max-w-[30em] text-[1.15em] leading-[1.22]">{lead}</p> : null}
         {children}
       </div>
-      <Scallop color={color} />
+      {hem ? <Scallop color={color} /> : null}
     </section>
   );
 }

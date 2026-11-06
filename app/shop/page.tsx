@@ -3,6 +3,7 @@ import { Coat } from "@/components/Coat";
 import { PaintLink } from "@/components/PaintLink";
 import { Reveal } from "@/components/Reveal";
 import { Scallop } from "@/components/decor";
+import { Frame } from "@/components/rooms/parts";
 import styles from "@/components/pages.module.css";
 import { paint, shop, site } from "@/content/site";
 
@@ -29,6 +30,31 @@ function dripPath() {
     x += gap + width;
   }
   return { d: `${d}V0Z`, width: x };
+}
+
+/** A little gallery wall of made-up posters, not actual Posteress prints. */
+function PosterWall() {
+  return (
+    <svg viewBox="0 0 640 560" role="img" aria-label="Illustration of three framed posters on a wall" className={styles.posters}>
+      <Frame x={36} y={42} w={250} h={340} frame={paint("hague")} mat={paint("romesco")}>
+        <circle cx={125} cy={128} r={80} fill={paint("india")} />
+        <rect y={236} width={250} height={104} fill={paint("calamine")} />
+      </Frame>
+      <Frame x={340} y={42} w={264} h={196} frame={paint("hague")} mat={paint("lulworth")}>
+        <path d="M0 196A132 132 0 0 1 264 196Z" fill={paint("hague")} />
+        <circle cx={204} cy={62} r={32} fill={paint("shallot")} />
+      </Frame>
+      <Frame x={340} y={292} w={170} h={230} frame={paint("hague")} mat={paint("bancha")}>
+        <path d="M0 230V120A85 85 0 0 1 170 120V230Z" fill={paint("shallot")} />
+        <path d="M46 230V124A39 39 0 0 1 124 124V230Z" fill={paint("romesco")} />
+      </Frame>
+      <Frame x={36} y={438} w={250} h={84} frame={paint("hague")} mat={paint("india")}>
+        <rect x={0} width={50} height={84} fill={paint("hague")} />
+        <rect x={100} width={50} height={84} fill={paint("romesco")} />
+        <rect x={200} width={50} height={84} fill={paint("aulait")} />
+      </Frame>
+    </svg>
+  );
 }
 
 export default function ShopPage() {
@@ -58,6 +84,9 @@ export default function ShopPage() {
               </PaintLink>
             </Reveal>
           </div>
+          <Reveal>
+            <PosterWall />
+          </Reveal>
         </section>
       </div>
     </Coat>

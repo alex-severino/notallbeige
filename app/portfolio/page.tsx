@@ -37,21 +37,20 @@ export default function PortfolioPage() {
                 as="article"
                 key={room.slug}
                 className={styles.tile}
+                style={{ "--span": shape.span, "--ratio": shape.ratio } as CSSProperties}
                 delay={(index % 2) * 90}
               >
-                <div data-arch={shape.arch} className={styles.tile} style={{ "--span": shape.span, "--ratio": shape.ratio } as CSSProperties}>
-                  <Link href={`/portfolio/${room.slug}`} className={styles.tileLink}>
-                    <div className={styles.tileArt}>
-                      <RoomArt slug={room.slug} title={`Illustration of ${room.title}`} />
-                    </div>
-                    <h2 className={styles.tileTitle}>{room.title}</h2>
-                    <div className={styles.tileMeta} aria-hidden="true">
-                      {room.scheme.map((item) => (
-                        <span key={item.part} className={styles.chip} style={{ background: paint(item.paint) }} />
-                      ))}
-                    </div>
-                  </Link>
-                </div>
+                <Link href={`/portfolio/${room.slug}`} className={styles.tileLink} data-arch={shape.arch}>
+                  <div className={styles.tileArt}>
+                    <RoomArt slug={room.slug} title={`Illustration of ${room.title}`} />
+                  </div>
+                  <h2 className={styles.tileTitle}>{room.title}</h2>
+                  <div className={styles.tileMeta} aria-hidden="true">
+                    {room.scheme.map((item) => (
+                      <span key={item.part} className={styles.chip} style={{ background: paint(item.paint) }} />
+                    ))}
+                  </div>
+                </Link>
               </Reveal>
             );
           })}
