@@ -29,7 +29,8 @@ type Layout = {
   logo: { x: number; y: number; size: number };
   door: { cx: number; halfWidth: number; height: number };
   vanish: [number, number];
-  cue: { size: number; drop: number };
+  /** `note` matches the tin notes' body size at a typical width for the layout. */
+  cue: { size: number; drop: number; gap: number; note: number };
   wide: boolean;
 };
 
@@ -40,7 +41,7 @@ const LANDSCAPE: Layout = {
   logo: { x: 72, y: 150, size: 276 },
   door: { cx: 1204, halfWidth: 186, height: 662 },
   vanish: [1204, 612],
-  cue: { size: 30, drop: 58 },
+  cue: { size: 30, drop: 48, gap: 28, note: 18 },
   wide: true,
 };
 
@@ -51,7 +52,7 @@ const PORTRAIT: Layout = {
   logo: { x: 32, y: 176, size: 256 },
   door: { cx: 556, halfWidth: 176, height: 590 },
   vanish: [556, 1160],
-  cue: { size: 34, drop: 44 },
+  cue: { size: 40, drop: 54, gap: 40, note: 30 },
   wide: false,
 };
 
@@ -112,8 +113,13 @@ function Scene({
           frameFill="var(--trim)"
           depth={DEPTH}
         />
-        <text className={styles.cue} x={door.cx} y={floor + cue.drop} textAnchor="middle" fontSize={cue.size} fontWeight={900} fill="var(--trim)" letterSpacing="-0.02em">
-          {home.hero.scrollCue}
+        <text className={styles.cue} x={door.cx} y={floor + cue.drop} textAnchor="middle" fill="var(--trim)">
+          <tspan fontSize={cue.size} fontWeight={900} letterSpacing="-0.02em">
+            {home.hero.welcome}
+          </tspan>
+          <tspan x={door.cx} dy={cue.gap} fontSize={cue.note} fontWeight={600}>
+            {home.hero.scrollCue}
+          </tspan>
         </text>
         <Furnishings layout={layout} />
       </g>
