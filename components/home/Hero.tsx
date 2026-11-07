@@ -30,7 +30,7 @@ type Layout = {
   door: { cx: number; halfWidth: number; height: number };
   vanish: [number, number];
   /** `note` matches the tin notes' body size at a typical width for the layout. */
-  cue: { size: number; drop: number; gap: number; note: number };
+  cue: { size: number; note: number };
   wide: boolean;
 };
 
@@ -41,7 +41,7 @@ const LANDSCAPE: Layout = {
   logo: { x: 72, y: 150, size: 276 },
   door: { cx: 1204, halfWidth: 186, height: 662 },
   vanish: [1204, 612],
-  cue: { size: 30, drop: 48, gap: 28, note: 18 },
+  cue: { size: 30, note: 18 },
   wide: true,
 };
 
@@ -52,7 +52,7 @@ const PORTRAIT: Layout = {
   logo: { x: 32, y: 176, size: 256 },
   door: { cx: 556, halfWidth: 176, height: 590 },
   vanish: [556, 1160],
-  cue: { size: 40, drop: 54, gap: 40, note: 30 },
+  cue: { size: 40, note: 30 },
   wide: false,
 };
 
@@ -81,6 +81,34 @@ function Furnishings({ layout }: { layout: Layout }) {
         <FloorLamp x={72} y={floor + 2} s={0.56} height={470} shade="var(--shade)" stripe="var(--pb)" fringe="var(--fringe)" stem="var(--trim)" />
       ) : null}
     </>
+  );
+}
+
+/** Welcome and the scroll line, centred in the Hague Blue floor band. */
+function Cue({
+  x,
+  floor,
+  height,
+  cue,
+}: {
+  x: number;
+  floor: number;
+  height: number;
+  cue: Layout["cue"];
+}) {
+  const gap = (cue.size + cue.note) * 0.12;
+  const block = cue.size + gap + cue.note;
+  const leadY = floor + (height - floor - block) / 2 + cue.size / 2;
+  const noteY = leadY + cue.size / 2 + gap + cue.note / 2;
+  return (
+    <text className={styles.cue} textAnchor="middle" fill="var(--trim)">
+      <tspan x={x} y={leadY} fontSize={cue.size} fontWeight={900} letterSpacing="-0.02em" dominantBaseline="central">
+        {home.hero.welcome}
+      </tspan>
+      <tspan x={x} y={noteY} fontSize={cue.note} fontWeight={600} dominantBaseline="central">
+        {home.hero.scrollCue}
+      </tspan>
+    </text>
   );
 }
 
@@ -113,14 +141,7 @@ function Scene({
           frameFill="var(--trim)"
           depth={DEPTH}
         />
-        <text className={styles.cue} x={door.cx} y={floor + cue.drop} textAnchor="middle" fill="var(--trim)">
-          <tspan fontSize={cue.size} fontWeight={900} letterSpacing="-0.02em">
-            {home.hero.welcome}
-          </tspan>
-          <tspan x={door.cx} dy={cue.gap} fontSize={cue.note} fontWeight={600}>
-            {home.hero.scrollCue}
-          </tspan>
-        </text>
+        <Cue x={door.cx} floor={floor} height={height} cue={cue} />
         <Furnishings layout={layout} />
       </g>
     </svg>

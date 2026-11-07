@@ -10,6 +10,7 @@
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
+  container-type: size;
 }
 
 .scene {
@@ -123,14 +124,16 @@
   }
 }
 
+/* The Hague Blue floor, from the illustration's floor line to the bottom of its viewBox. */
 .controls {
   position: absolute;
   z-index: 2;
   left: clamp(1rem, 3vw, 3rem);
-  bottom: clamp(0.65rem, 1.6vh, 1.1rem);
+  bottom: 0;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
+  height: min(12cqh, 7.5cqw);
   gap: clamp(0.75rem, 1.6vw, 1.5rem);
   opacity: calc(1 - var(--progress) * 9);
   pointer-events: auto;
@@ -232,8 +235,10 @@
   .controls {
     right: 1rem;
     left: 1rem;
+    bottom: 0;
     flex-direction: column;
     align-items: flex-start;
+    height: min(12.439cqh, 25.5cqw);
     gap: 0.45rem;
   }
   .note {
@@ -263,10 +268,6 @@
 @media (prefers-reduced-motion: reduce) {
   .hero {
     height: 100svh;
-  }
-  /* The hero doesn't zoom here, so scrolling won't take anyone through the door. */
-  .cue {
-    display: none;
   }
   .curtain,
   .introRoller {

@@ -68,7 +68,7 @@ export const nav: NavItem[] = [
 export const home = {
   hero: {
     coverline: ["signature interiors by", "angelina severino"],
-    welcome: "welcome to my home.",
+    welcome: "welcome to my home!",
     scrollCue: "Scroll to come in.",
     tinPrompt: { title: "press a tin", body: "Go on, repaint the room." },
   },
